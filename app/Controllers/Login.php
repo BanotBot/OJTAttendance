@@ -47,7 +47,7 @@
                 "password" => $password
             ]);
 
-            return redirect()->to(site_url("students_ojt/dashboard"));
+            return redirect()->to(site_url("students_ojt/mainview"));
 
         }
 

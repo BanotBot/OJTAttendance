@@ -9,5 +9,5 @@ use App\Controllers\students_ojt\Dashboard;
 
 $routes->get('/', 'Home::index');
 $routes->post("login/auth", to: "Login::auth");
-$routes->get("students_ojt/dashboard" , "students_ojt\Dashboard::index");
+$routes->get("students_ojt/mainview" , "students_ojt\Mainview::index");
 

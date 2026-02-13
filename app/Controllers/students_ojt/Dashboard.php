@@ -7,7 +7,7 @@
     {
         public function index()
         {
-            return view("students_ojt/Dashboard");
+            return view("students_ojt/dashboard");
         }
 
         
