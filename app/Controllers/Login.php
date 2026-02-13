@@ -1,19 +1,25 @@
 <?php
 
-    use App\Controllers\BaseController;
+    namespace App\Controllers;
+    use App\Models\Users;
 
     class Login extends BaseController
     {
+
+        public function index() 
+        {
+            return view("Login");
+        }
 
         public function auth()
         {
 
             $username = $this->request->getPost("username");
             $password = $this->request->getPost("password");
-            
+
             $rules = [
-                "username" => $username,
-                "password" => $password
+                "username" => "required",
+                "password" => "required"
             ];
 
             if (!$this->validate($rules)) {
@@ -41,7 +47,7 @@
                 "password" => $password
             ]);
 
-            return redirect()->to("/users");
+            return redirect()->to(site_url("students_ojt/dashboard"));
 
         }
 

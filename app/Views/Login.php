@@ -17,7 +17,7 @@
                             <h4>OJT Attendance Login</h4>
                         </div>
                         <div class="card-body">
-                            <form action="login_process.php" method="POST">
+                            <form action="<?php echo site_url("login/auth") ?>" method="POST">
                                 <div class="form-group">
                                     <label for="username">Username</label>
                                     <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>

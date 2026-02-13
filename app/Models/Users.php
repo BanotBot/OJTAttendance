@@ -1,11 +1,11 @@
 <?php
 
-use CodeIgniter\Model;
-
+    namespace App\Models;
+    use CodeIgniter\Model;
 
     class Users extends Model 
     {
-        protected $tableUsers = "users";
+        protected $table = "users";
         protected $primaryKey = "userId";
         
         protected $allowedFields = ["username", "password"];
