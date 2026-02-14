@@ -6,6 +6,6 @@
     <title>Students OJT | Report</title>
 </head>
 <body>
-    <h1>Report</h1>
+    <h1>Report View</h1>
 </body>
 </html>

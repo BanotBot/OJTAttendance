@@ -6,6 +6,6 @@
     <title>Students OJT | Attendance</title>
 </head>
 <body>
-    
+    <h1>Attendance View</h1>
 </body>
 </html>

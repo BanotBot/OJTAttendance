@@ -1,13 +1,13 @@
 <?php
 
-use CodeIgniter\Router\RouteCollection;
-use App\Controllers\students_ojt\Dashboard;
+    use CodeIgniter\Router\RouteCollection;
+    use App\Controllers\students_ojt\Dashboard;
 
-/**
- * @var RouteCollection $routes
-*/
+    /**
+     * @var RouteCollection $routes
+    */
 
-$routes->get('/', 'Home::index');
-$routes->post("login/auth", to: "Login::auth");
-$routes->get("students_ojt/mainview" , "students_ojt\Mainview::index");
+    $routes->get('/', 'Home::index');
+    $routes->post("login/auth", to: "Login::auth");
+    $routes->get("students_ojt/mainview" , "students_ojt\Mainview::index");
 

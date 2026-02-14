@@ -85,6 +85,7 @@
                     </div>
                 </div>
             </section>
+            
         </aside>
 
         <section id="main_content"></section>
