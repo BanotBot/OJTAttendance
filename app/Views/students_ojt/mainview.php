@@ -58,7 +58,7 @@
 </head>
 <body>
 
-    <main>
+    <main class="flex min-h-screen">
         <aside id="sidebar" class="w-72 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen shrink-0">
             <section class="p-8">
                 <h1 class="text-2xl font-serif font-bold text-ethereal tracking-tight"> Students OJT </h1>
@@ -88,7 +88,7 @@
             </section>
             
         </aside>
-        <section id="main_content"></section>
+        <section id="main_content" class="flex-1 bg-bgWarm p-8 overflow-y-auto"></section>
     </main>
 
     <!-- Dependencies --> 
