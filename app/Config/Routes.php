@@ -10,6 +10,8 @@
 
     $routes->get("/", "Home::index");
     $routes->post("login/auth", to: "Login::auth");
+    $routes->get("register", "Register::index");
+    $routes->post("register/auth", "Register::auth");
     $routes->get("students_ojt/mainview" , "students_ojt\Mainview::index");
 
     // --- Content Load Students Ojt -> UI ---

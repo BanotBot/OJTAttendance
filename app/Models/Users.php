@@ -11,3 +11,19 @@
         protected $allowedFields = ["username", "password"];
 
     }
+
+    class OjtStudents extends Model 
+    {
+        protected $table = "ojt_students";
+        protected $primaryKey = "ojtId ";
+
+        protected $allowedFields = [
+            "firstName",
+            "middleName",
+            "lastName",
+            "address"
+        ];
+
+        
+
+    }
