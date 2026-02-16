@@ -80,8 +80,8 @@
 
     .date-range-group:focus-within {
         background-color: white;
-        border-color: #B38888;
-        box-shadow: 0 0 0 1px #B38888;
+        border-color: #4518e4;
+        box-shadow: 0 0 0 1px #4518e4;
     }
 
     .date-label {
@@ -124,7 +124,7 @@
 
     .search-input:focus {
         background-color: white;
-        box-shadow: 0 0 0 1px #B38888;
+        box-shadow: 0 0 0 1px #4518e4;
     }
 
     .glass-card {

@@ -34,9 +34,15 @@ async function loadPageView(page)
         const result = await response.text();
         document.getElementById("main_content").innerHTML = result;
 
+        loadScript();
 
     } catch (error) {
         console.error("Error loading page: ", error);
         document.getElementById("main_content").innerHTML = "<p class='text-danger'>Failed to load page.</p>";
     }
+}
+
+function loadScript()
+{
+    loadInitCameraScript();
 }

@@ -94,18 +94,20 @@
         background-color: var(--ethereal-dark); 
         transform: translateY(-1px); 
     }
+
     #ojt-attendance-container .btn-ethereal-outline:hover { 
         background-color: rgba(69, 24, 228, 0.05); 
     }
+
 </style>
 
 <section id="ojt-attendance-container" class="attendance-module">
     <div class="nav-container">
-        <h1 class="dashboard-title">Dashboard View</h1>
+        <h1 class="dashboard-title">Camera View</h1>
     </div>
 
     <div class="video-scanner">
-        <video id="webcam" autoplay playsinline></video>
+        <div id="webcam"></div>
         <div class="scanner-overlay"></div>
         <div class="loading-overlay" id="camera-loading">
             <div class="spinner-border spinner-border-sm mr-2" role="status"></div>
@@ -128,44 +130,3 @@
         </div>
     </div>
 </section>
-
-<script>
-    /**
-     * Camera initialization wrapped in a function to allow 
-     * re-triggering if content is loaded via AJAX.
-    */
-    function initOjtCamera() {
-        const video = document.getElementById('webcam');
-        const loader = document.getElementById('camera-loading');
-
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function(stream) {
-                    video.srcObject = stream;
-                    loader.style.display = 'none';
-                })
-                .catch(function(error) {
-                    console.error("Camera Error: ", error);
-                    loader.innerHTML = '<span class="px-2 text-center">Camera Access Denied</span>';
-                });
-        }
-    }
-
-    // Auto-init on load
-    document.addEventListener('DOMContentLoaded', initOjtCamera);
-    
-    // Fallback for dynamic loading (call this manually after AJAX success)
-    if (window.jQuery) {
-        $(document).ajaxSuccess(function() {
-            if ($('#webcam').length && !$('#webcam').prop('srcObject')) {
-                initOjtCamera();
-            }
-        });
-    }
-
-    function recordAttendance(status) {
-        console.log("Attendance Status: " + status);
-        // Add your logic to save to database here
-        alert("Success: Checked " + status);
-    }
-</script>
