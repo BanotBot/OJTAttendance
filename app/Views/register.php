@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OJT Attendance | Login</title>
+    <title>OJT Attendance | Register</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -32,10 +32,6 @@
                                 
                                 <div class="text-center mt-3">
                                     <a href="#" class="small">Forgot password?</a>
-                                </div>
-
-                                <div class="text-center mt-3">
-                                    <a href="<?php echo site_url("register")?>" class="small">Don't have account ?</a>
                                 </div>
                             </form>
                         </div>

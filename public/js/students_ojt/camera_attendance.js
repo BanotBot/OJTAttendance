@@ -17,22 +17,24 @@ function loadInitCameraScript()
     });
 }
 
-function recordAttendance(status)
+async function recordAttendance(status)
 {
     try {
 
-        Webcam.snap(function(data_uri){
+        Webcam.snap(async function(data_uri){
             console.log("status", status);
             console.log("Captured Image : ", data_uri);
 
-            const response = fetch("<?php site_url('students_ojt/attendance/save') ?>", {
+            let imageFile = data_uri.split(",")[1];
+            console.log("DataFile : ", imageFile);
+
+            const response = await fetch("<?php echo site_url('students_ojt/attendance/saveAttendance') ?>", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    status: status,
-                    image: data_uri
+                    imageFile: imageFile
                 })
             });
 
