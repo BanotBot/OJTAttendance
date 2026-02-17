@@ -18,7 +18,6 @@
 
         public const STATUS_ACTIVE = 1;
         public const STATUS_INACTIVE = 2;
-        public const STATUS_SUSPENDED = 3;
         
         protected $allowedFields = [
             "userId",

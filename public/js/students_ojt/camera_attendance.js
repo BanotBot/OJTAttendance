@@ -39,13 +39,11 @@ async function recordAttendance(status)
             });
 
             const result = response.json();
-
-            if (!response.ok) {
-                throw new Error("Unable to record the attendance captured, Please try again later!");
+            if (!success) {
+                alert(result.message);
             }
 
-            alert("Successfully recorded");
-
+            alert(result.message);
         });
     } catch (error) {
         console.error(error);

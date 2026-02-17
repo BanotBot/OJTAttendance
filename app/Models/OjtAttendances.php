@@ -8,7 +8,8 @@
         protected $tables = "ojt_attendances";
         protected $primaryKey = "attendanceId";
 
-        protected $allowedFields = [""]
+        protected $allowedFields = ["ojtId", "imgFileName", "currentDate", "currentTime"];
 
-     
+        public const PRESENT_STATUS = 3;
+        public const ABSENT_STATUS = 4;
     }
