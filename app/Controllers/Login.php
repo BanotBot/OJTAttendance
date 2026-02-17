@@ -27,8 +27,11 @@
             }
 
             $userModel = new Users();
-            $user = $userModel->where("username", $username)->first();
+            $user = $userModel
+                    ->where("username", $username)
+                    ->first();
 
+                
             if (!$user) {
                 return redirect()->back()->with("error", "No user found in this username!");
             }

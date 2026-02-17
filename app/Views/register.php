@@ -26,18 +26,18 @@
                             <form action="<?php echo site_url("register/auth") ?>" method="POST">
 
                                 <div class="form-group">    
-                                    <label for="firstname">FirstName : </label>
-                                    <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Enter your firstname" required>
+                                    <label for="firstName">FirstName : </label>
+                                    <input type="text" name="firstName" id="firstName" class="form-control" placeholder="Enter your firstname" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="username">MiddleName : </label>
-                                    <input type="text" name="middlename" id="middlename" class="form-control" placeholder="Enter your middlename" required>
+                                    <label for="middleName">MiddleName : </label>
+                                    <input type="text" name="middleName" id="middleName" class="form-control" placeholder="Enter your middlename" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="username">LastName : </label>
-                                    <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Enter your lastname" required>
+                                    <label for="lastName">LastName : </label>
+                                    <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Enter your lastname" required>
                                 </div>
 
                                 <div class="form-group">
@@ -46,23 +46,23 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="username">ContactNumber : </label>
+                                    <label for="contactNumber">ContactNumber : </label>
                                     <input type="text" name="contactNumber" id="contactNumber" class="form-control" placeholder="Enter your contactNumber" required>
                                 </div>
+
+                                <p id="credentials"><strong>Credentials</strong></p>
 
                                 <div class="form-group">
                                     <label for="username">Username : </label>
                                     <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
                                 </div>
 
-                                <p id="credentials"><strong>Credentials</strong></p>
-
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                <button type="submit" class="btn btn-primary btn-block">Register Account</button>
                                 
                                 <div class="text-center mt-3">
                                    Already have account ?  <a href="<?php echo site_url("/") ?>" class="small"><span><strong>Login</strong></span></a>

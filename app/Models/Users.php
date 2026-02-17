@@ -15,15 +15,16 @@
     class OjtStudents extends Model 
     {
         protected $table = "ojt_students";
-        protected $primaryKey = "ojtId ";
+        protected $primaryKey = "ojtId";
 
         protected $allowedFields = [
+            "userId",
             "firstName",
             "middleName",
             "lastName",
-            "address"
+            "address",
+            "contactNumber"
         ];
 
         
-
     }
