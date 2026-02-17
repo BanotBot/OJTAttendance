@@ -1,7 +1,7 @@
 
 <?php
 
-    class ImageHelpers
+    class ImageHelper
     {
         public function generateFileName($imageFile)
         {

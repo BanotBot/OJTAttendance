@@ -8,5 +8,7 @@
         protected $tables = "ojt_attendances";
         protected $primaryKey = "attendanceId";
 
+        protected $allowedFields = [""]
+
      
     }
