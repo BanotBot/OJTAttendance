@@ -7,7 +7,6 @@
     {
         protected $table = "users";
         protected $primaryKey = "userId";
-        
         protected $allowedFields = ["username", "password"];
 
     }
@@ -17,14 +16,18 @@
         protected $table = "ojt_students";
         protected $primaryKey = "ojtId";
 
+        public const STATUS_ACTIVE = 1;
+        public const STATUS_INACTIVE = 2;
+        public const STATUS_SUSPENDED = 3;
+        
         protected $allowedFields = [
             "userId",
             "firstName",
             "middleName",
             "lastName",
             "address",
-            "contactNumber"
+            "contactNumber",
+            "status"
         ];
-
         
     }

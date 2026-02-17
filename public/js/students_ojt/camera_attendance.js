@@ -28,7 +28,7 @@ async function recordAttendance(status)
             let imageFile = data_uri.split(",")[1];
             console.log("DataFile : ", imageFile);
 
-            const response = await fetch("<?php echo site_url('students_ojt/attendance/saveAttendance') ?>", {
+            const response = await fetch("<?php echo site_url('students_ojt/attendance') ?>", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -52,4 +52,3 @@ async function recordAttendance(status)
     }
     
 }
-

@@ -47,15 +47,14 @@
             ]);
 
             $userId = $usersModel->getInsertID();
-            echo $userId;
-   
             $ojtStudentsModel->insert([
                 "userId" => $userId,
                 "firstName" => $firstName,
                 "middleName" => $middleName,
                 "lastName" => $lastName,
                 "address" => $address,
-                "contactNumber" => $contactNumber
+                "contactNumber" => $contactNumber,
+                "status" => OjtStudents::STATUS_ACTIVE
             ]);
 
             return redirect()->to(site_url("/"));

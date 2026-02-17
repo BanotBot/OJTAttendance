@@ -1,7 +1,6 @@
 <?php
 
     use CodeIgniter\Router\RouteCollection;
-    use App\Controllers\students_ojt\Dashboard;
 
     /**
      * @var RouteCollection $routes
@@ -20,6 +19,6 @@
     $routes->get("students_ojt/report", "Students::report");
 
     // --- Attendance Upload Routes ---
-    $routes->post("students_ojt/attendance/saveAttendance", "Attendance::saveAttendance");
+    $routes->post("students_ojt/attendance", "Attendance::saveAttendance");
 
 

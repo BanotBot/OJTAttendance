@@ -44,5 +44,6 @@ async function loadPageView(page)
 
 function loadScript()
 {
-    loadInitCameraScript();
+    // loadInitCameraScript();
 }
+
