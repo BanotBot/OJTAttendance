@@ -11,7 +11,7 @@ class ImageHelper
         $image = str_replace(" ", "+", $image);
 
         $imageData = base64_decode($image);
-        $fileName = $this->createFileName($imageData);
+        $fileName = $this->createFileName();
         $uploadDir = FCPATH . "uploads/";
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -32,8 +32,8 @@ class ImageHelper
         return file_put_contents($filePath, $imageData);
     }
 
-    private function createFileName($imageData)
+    private function createFileName()
     {
-        return uniqid($imageData).".jpg";
+        return uniqid().".jpg";
     }
 }
