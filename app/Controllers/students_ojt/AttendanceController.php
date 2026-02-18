@@ -41,34 +41,34 @@ class AttendanceController extends BaseController
 
             $dbconnection->transStart();
 
-            $attendance = $attendancesModel
-                                ->where("ojtId", $ojtId)
-                                ->where("date", $currentDate)
-                                ->first();
+                $attendance = $attendancesModel
+                                    ->where("ojtId", $ojtId)
+                                    ->where("date", $currentDate)
+                                    ->first();
 
-            if (!$attendance) {
-                // --- TIME IN ---
-                $dbconnection->table("ojt_attendances")->insert([
-                    "ojtId" => 1,
-                    "imgTimeIn" => $imageFileName,
-                    "date" => $currentDate,
-                    "timeIn" => $currentTime,
-                    "status" => OjtAttendances::PRESENT_STATUS
-                ]);
-                $message = "Successfully Time-in recorded!";
-
-            } elseif(!$attendance["timeOut"]){
-                // --- TIME OUT ---
-                $dbconnection->table("ojt_attendances")
-                    ->update($attendance["attendanceId"], [
-                        "imgTimeOut" => $imageFileName,
-                        "timeOut" => $currentTime
+                if (!$attendance) {
+                    // --- TIME IN ---
+                    $dbconnection->table("ojt_attendances")->insert([
+                        "ojtId" => $ojtId,
+                        "imgTimeIn" => $imageFileName,
+                        "date" => $currentDate,
+                        "timeIn" => $currentTime,
+                        "status" => OjtAttendances::PRESENT_STATUS
                     ]);
-                    
-                $message = "Successfully Time-out recorded!";
-            }else{
-                $message = "Attendance already completed today!";
-            }
+                    $message = "Successfully Time-in recorded!";
+
+                } elseif(!$attendance["timeOut"]){
+                    // --- TIME OUT ---
+                    $dbconnection->table("ojt_attendances")
+                        ->update($attendance["attendanceId"], [
+                            "imgTimeOut" => $imageFileName,
+                            "timeOut" => $currentTime
+                        ]);
+                        
+                    $message = "Successfully Time-out recorded!";
+                }else{
+                    $message = "Attendance already completed today!";
+                }
 
             $dbconnection->transComplete();    
             if ($dbconnection->transStatus() === FALSE) {
