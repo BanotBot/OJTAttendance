@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Helpers;
+
+use Exception;
 class ImageHelper
 {
     public function generateFileName($imageFile)
@@ -12,9 +14,17 @@ class ImageHelper
         $fileName = $this->createFileName($imageData);
         $filePath = FCPATH . "uploads/" . $fileName;
 
-        file_put_contents($filePath, $fileName);
+        $writeImageIntoDir = file_put_contents($filePath, $imageData);
+        if ($writeImageIntoDir) {
+            throw new Exception("Unable to write the image into the dir");
+        }
 
         return $fileName;
+    }
+
+    private function uploadImgIntoDir($filePath, $imageData)
+    {
+        return file_put_contents($filePath, $imageData);
     }
 
     private function createFileName($imageData)

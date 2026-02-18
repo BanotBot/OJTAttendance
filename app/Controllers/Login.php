@@ -28,6 +28,7 @@
 
             $userModel = new Users();
             $user = $userModel
+                    ->select("userId, username, password")
                     ->where("username", $username)
                     ->first();
 
