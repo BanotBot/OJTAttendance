@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Controllers\students_ojt;
+
+use App\Controllers\BaseController;
+use App\Models\OjtAttendances;
+use App\Helpers\ImageHelper;
+use App\Helpers\OjtStudentsHelper;
+
+class AttendanceController extends BaseController
+{
+
+    public function saveAttendance()
+    {
+
+
+        $imageHelpersObj = new ImageHelper();
+        $attendancesModel = new OjtAttendances();
+        $dbconnection = \Config\Database::connect();
+
+        try
+        {
+            $userId = session()->get("userId");
+            
+            $ojtId = OjtStudentsHelper::getOjtId($userId);
+            if ($ojtId === null) {
+                return $this->response->setJSON(["success" => false, "message" => "Invalid request"]);
+            }
+
+            $data = $this->request->getJSON(true);
+            $dataFile = $data["imageFile"] ?? null;
+
+            if ($dataFile === null) {
+                return $this->response->setJSON(["success" => false, "message" => "Image file does not have a value"]);
+            }
+
+            $imageFileName = $imageHelpersObj->generateFileName($dataFile);
+            $currentDate = date("Y-m-d"); // 2026-02-17
+            $currentTime = date("H:i:s"); // 24 hour format
+
+            $dbconnection->transStart();
+
+            $attendance = $dbconnection->table("ojt_attendances")
+                                ->where("ojtId", $ojtId)
+                                ->where("date", $currentDate)
+                                ->first();
+
+            if (!$attendance) {
+                // --- TIME IN ---
+                $dbconnection->table("ojt_attendances")->insert([
+                    "ojtId" => 1,
+                    "imgTimeIn" => $imageFileName,
+                    "date" => $currentDate,
+                    "timeOut" => $currentTime,
+                    "status" => OjtAttendances::PRESENT_STATUS
+                ]);
+
+                $message = "Successfully Time-in recorded!";
+
+            } elseif(!$attendance["timeOut"]){
+                // --- TIME OUT ---
+                $dbconnection->table("ojt_attendances")
+                    ->update($attendance["attendanceId"], [
+                        "imgTimeOut" => $imageFileName,
+                        "timeOut" => $currentTime
+                    ]);
+                    
+                $message = "Successfully Time-out recorded!";
+            }else{
+                $message = "Attendance already completed today!";
+            }
+
+            $dbconnection->transComplete();    
+            if ($dbconnection->transStatus() === FALSE) {
+                return $this->response->setJSON(["success" => false, "message" => "Internal server error1"]);
+            }
+
+            return $this->response->setJSON(["success" => true, "message" => $message]);
+        } catch (\Throwable $th) {
+            // dd($th->getMessage());
+            return $this->response->setJSON(["success" => false, "message" => $th->getMessage()]);
+        }
+    }
+}

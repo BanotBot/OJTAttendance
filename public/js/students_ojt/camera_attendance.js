@@ -19,16 +19,16 @@ function loadInitCameraScript()
 
 async function recordAttendance(status)
 {
+    console.log("status", status);
     try {
 
         Webcam.snap(async function(data_uri){
-            console.log("status", status);
             console.log("Captured Image : ", data_uri);
 
             let imageFile = data_uri.split(",")[1];
             console.log("DataFile : ", imageFile);
 
-            const response = await fetch("<?php echo site_url('students_ojt/attendance') ?>", {
+            const response = await fetch(SAVE_ATTENDANCE_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -38,8 +38,10 @@ async function recordAttendance(status)
                 })
             });
 
-            const result = response.json();
-            if (!success) {
+            const result = await response.json();
+            console.log(result);
+            console.log(response);
+            if (!result.success) {
                 alert(result.message);
             }
 

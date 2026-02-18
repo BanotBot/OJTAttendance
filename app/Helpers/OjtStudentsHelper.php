@@ -1,22 +1,24 @@
 <?php
 
+namespace App\Helpers;
 use App\Models\OjtStudents;
 use App\Models\Users;
 
-    class OjtStudentsHelper 
+class OjtStudentsHelper
+{
+    public static function getOjtId($userId)
     {
-        public static function getOjtId($userId)
-        {
-            $usersModel = new Users();
-            $ojtId = $usersModel
-                        ->select("ojtId")
-                        ->where(
-                            [
-                                "userId",
-                                "status"
-                            ], $userId, OjtStudents::STATUS_ACTIVE)
-                        ->first();
+        $usersModel = new Users();
+        $ojtId = $usersModel
+            ->select("ojtId")
+            ->where(
+                [
+                    "userId" => $userId,
+                    "status" => OjtStudents::STATUS_ACTIVE
+                ]
+            )
+            ->first();
 
-            return $ojtId;
-        }
+        return $ojtId["ojtId"] ??  null;
     }
+}

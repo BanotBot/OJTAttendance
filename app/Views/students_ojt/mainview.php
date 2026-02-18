@@ -100,6 +100,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <script>
         const BASE_URL = "<?php echo base_url("students_ojt/"); ?>";
+        const SAVE_ATTENDANCE_URL = "<?php echo base_url("saveAttendance") ?>";
     </script>
     <script src="<?php echo base_url('js/dynamic_content_loading.js')?>"></script>
     <script src="<?php echo base_url('js/students_ojt/camera_attendance.js')?>"></script>
