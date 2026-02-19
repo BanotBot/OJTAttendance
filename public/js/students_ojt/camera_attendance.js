@@ -4,18 +4,35 @@ function loadInitCameraScript()
     console.log("CAMERA INITIALIZED");
     console.log(typeof Webcam);
     Webcam.set({
-        width:400,
-        height:300,
-        image_format:'jpeg',
-        jpeg_quality:90
+        width: 1280,
+        height: 720,
+        dest_width: 1280,
+        dest_height: 720,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+        force_flash: false,
+        flip_horiz: true, 
+        fps: 45
     });
     
     Webcam.attach("#webcam");
 
     Webcam.on("live", function(){
         $("#camera-loading").css("display", "none");
+
+        const video = document.querySelector("webcam video");
+        if (video) {
+            video.style.width = "100%";
+            video.style.height = "100%";
+            video.style.objectFit = "cover";
+        }
     });
 }
+
+Webcam.on("error", function(err) {
+    console.error("Webcam Error:", err);
+    document.getElementById("camera-loading").innerHTML = "<span>Camera Access Denied</span>";
+});
 
 async function recordAttendance(status)
 {

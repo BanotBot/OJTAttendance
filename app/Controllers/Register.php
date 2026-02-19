@@ -2,7 +2,7 @@
 
     namespace App\Controllers;
 
-    use App\Models\OjtStudents;
+    use App\Models\OjtStudentsModel;
     use App\Models\Users;
 
     class Register extends BaseController
@@ -24,7 +24,7 @@
             $password = $this->request->getPost("password");
 
             $usersModel = new Users();
-            $ojtStudentsModel = new OjtStudents();
+            $ojtStudentsModel = new OjtStudentsModel();
 
             $rules = [
                 "username" => "required",
@@ -54,7 +54,7 @@
                 "lastName" => $lastName,
                 "address" => $address,
                 "contactNumber" => $contactNumber,
-                "status" => OjtStudents::STATUS_ACTIVE
+                "status" => OjtStudentsModel::STATUS_ACTIVE
             ]);
 
             return redirect()->to(site_url("/"));

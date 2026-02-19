@@ -14,7 +14,10 @@
     }
 
     @media (min-width: 768px) {
-        .emp-header { flex-direction: row; align-items: flex-end; }
+        .emp-header {
+            flex-direction: row;
+            align-items: flex-end;
+        }
     }
 
     /* 2. Typography */
@@ -33,7 +36,11 @@
     }
 
     /* 3. Interactive Components (Buttons/Inputs) */
-    .btn-group { display: flex; align-items: center; gap: 0.75rem; }
+    .btn-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
 
     .btn-primary {
         display: flex;
@@ -45,12 +52,12 @@
         border-radius: 0.5rem;
         font-weight: 500;
         transition: all 0.3s;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     .btn-primary:hover {
         background-color: #966D6D;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .btn-outline {
@@ -63,9 +70,11 @@
         transition: background-color 0.2s;
     }
 
-    .btn-outline:hover { background-color: rgba(179, 136, 136, 0.05); }
+    .btn-outline:hover {
+        background-color: rgba(179, 136, 136, 0.05);
+    }
 
-    
+
     /* Date Picker Container */
     .date-range-group {
         display: flex;
@@ -131,7 +140,7 @@
         background-color: white;
         border-radius: 1.5rem;
         border: 1px solid #F3F4F6;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         overflow: hidden;
     }
 
@@ -166,7 +175,9 @@
         border-bottom: 1px solid #F9FAFB;
     }
 
-    .row-hover:hover { background-color: #F9FAFB; }
+    .row-hover:hover {
+        background-color: #F9FAFB;
+    }
 
     .status-chip {
         padding: 0.25rem 0.75rem;
@@ -177,9 +188,23 @@
         border: 1px solid transparent;
     }
 
-    .active { background-color: #F0FDF4; color: #15803D; border-color: #DCFCE7; }
-    .break { background-color: #FFFBEB; color: #B45309; border-color: #FEF3C7; }
-    .off { background-color: #F9FAFB; color: #6B7280; border-color: #F3F4F6; }
+    .active {
+        background-color: #F0FDF4;
+        color: #15803D;
+        border-color: #DCFCE7;
+    }
+
+    .break {
+        background-color: #FFFBEB;
+        color: #B45309;
+        border-color: #FEF3C7;
+    }
+
+    .off {
+        background-color: #F9FAFB;
+        color: #6B7280;
+        border-color: #F3F4F6;
+    }
 
     .table-footer {
         padding: 1.5rem;
@@ -190,10 +215,14 @@
     }
 
     @media (max-width: 768px) {
-        .grid-layout { grid-template-columns: 1fr; }
-        .span-2 { grid-column: span 1; }
+        .grid-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .span-2 {
+            grid-column: span 1;
+        }
     }
-    
 </style>
 
 <section class="attendance-container">
@@ -206,7 +235,7 @@
         </header>
 
         <article class="glass-card">
-            
+
             <div class="table-toolbar">
                 <div class="flex items-center gap-4">
                     <div class="date-range-group">
@@ -219,57 +248,80 @@
 
                     <div class="search-wrapper">
                         <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </span>
-                        <input type="text" placeholder="Search employee..." class="search-input">
+                        <input type="text" placeholder="Search students..." class="search-input">
                     </div>
                 </div>
             </div>
-            
+
             <table class="management-table">
                 <thead>
                     <tr>
                         <th class="table-head-cell">Staff Member</th>
-                        <th class="table-head-cell">Position</th>
-                        <th class="table-head-cell">Rate per/hr </th>
-                        <th class="table-head-cell">Overtime Date</th>
-                        <th class="table-head-cell">Overtime End</th>
+                        <th class="table-head-cell">Date</th>
+                        <th class="table-head-cell">Time In</th>
+                        <th class="table-head-cell">Time Out</th>
                         <th class="table-head-cell">Status</th>
                         <th class="table-head-cell text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="row-hover">
-                        <td class="table-body-cell">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-[#B38888]/10 flex items-center justify-center text-[#966D6D] font-serif italic font-bold">A</div>
-                                <div>
-                                    <p class="font-semibold text-gray-900 leading-none">Amara Vance</p>
-                                    <p class="text-[11px] text-gray-400 mt-1 italic">00023001</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="table-body-cell font-medium">Head Roaster</td>
-                        <td class="table-body-cell">38.5 hrs</td>
-                        <td class="table-body-cell">Jan 06, 2026</td>
-                        <td class="table-body-cell">02:00 PM</td>
-                        <td class="table-body-cell"><span class="status-chip active">Absent</span></td>
-                        <td class="table-body-cell text-right">
-                            <button class="text-[#B38888] font-bold hover:text-[#966D6D] text-xs uppercase tracking-tighter">Profile</button>
-                        </td>
-                    </tr>
+                    
+                    <?php 
+                    if (!empty($attendances)) { ?>
+                        <?php foreach ($attendances as $data) { ?>
+                            <tr class="row-hover">
+                                <td class="table-body-cell">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-[#B38888]/10 flex items-center justify-center text-[#966D6D] font-serif italic font-bold">
+                                            A
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-gray-900 leading-none">Amara Vance</p>
+                                            <p class="text-[11px] text-gray-400 mt-1 italic">00023001</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-body-cell font-medium">Head Roaster</td>
+                                <td class="table-body-cell">38.5 hrs</td>
+                                <td class="table-body-cell"><?php echo esc($data["date"]) ?></td>
+                                <td class="table-body-cell"><?php echo esc($data["timeIn"]) ?></td>
+                                <td class="table-body-cell"><?php echo esc($data["timeOut"]) ?></td>
+                                <td class="table-body-cell">
+                                    <span class="status-chip active"><?php echo esc($data["status"]) ?></span>
+                                </td>
+                                <td class="table-body-cell text-right">
+                                    <button
+                                        class="text-[#B38888] font-bold hover:text-[#966D6D] text-xs uppercase tracking-tighter">Profile</button>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <tr>
+                            <td colspan="5" class="text-center">No Data found</td>
+                        </tr>
+                    <?php } ?>
+
                 </tbody>
             </table>
 
             <footer class="table-footer">
-                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">© 2026 Cafe Ethereal Systems</p>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">© 2026 OJT ATTENDANCE
+                    Systems</p>
                 <div class="btn-group">
-                    <button class="w-8 h-8 flex items-center justify-center rounded bg-white border border-gray-100 text-gray-400 hover:text-[#B38888]">1</button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded bg-white border border-gray-100 text-gray-400 hover:text-[#B38888]">2</button>
+                    <button
+                        class="w-8 h-8 flex items-center justify-center rounded bg-white border border-gray-100 text-gray-400 hover:text-[#B38888]">1</button>
+                    <button
+                        class="w-8 h-8 flex items-center justify-center rounded bg-white border border-gray-100 text-gray-400 hover:text-[#B38888]">2</button>
                 </div>
             </footer>
+
         </article>
     </div>
 </section>

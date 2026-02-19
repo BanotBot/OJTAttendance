@@ -13,19 +13,16 @@ class AttendanceController extends BaseController
     public function saveAttendance()
     {
 
-        // return $this->response->setJSON(["success" => false, "message" => "I am calling in this part"]);
-
         $imageHelpersObj = new ImageHelper();
         $attendancesModel = new OjtAttendances();
         $dbconnection = \Config\Database::connect();
 
-        try
-        {
+        try {
             $userId = session()->get("userId");
-            
+
             $ojtId = OjtStudentsHelper::getOjtId($userId);
             if ($ojtId === null) {
-                return $this->response->setJSON(["success" => false, "message" => "Invalid request userId: $userId ojtId : $ojtId"]);
+                return $this->response->setJSON(["success" => false, "message" => "Invalid request. Please try again or login again!"]);
             }
 
             $data = $this->request->getJSON(true);
@@ -41,39 +38,38 @@ class AttendanceController extends BaseController
 
             $dbconnection->transStart();
 
-                $attendance = $attendancesModel
-                                    ->where("ojtId", $ojtId)
-                                    ->where("date", $currentDate)
-                                    ->first();
+            $attendance = $attendancesModel
+                ->where("ojtId", $ojtId)
+                ->where("date", $currentDate)
+                ->first();
 
-                if (!$attendance) {
-                    // --- TIME IN ---
-                    $dbconnection->table("ojt_attendances")->insert([
-                        "ojtId" => $ojtId,
-                        "imgTimeIn" => $imageFileName,
-                        "date" => $currentDate,
-                        "timeIn" => $currentTime
+            if (!$attendance) {
+                // --- TIME IN ---
+                $dbconnection->table("ojt_attendances")->insert([
+                    "ojtId" => $ojtId,
+                    "imgTimeIn" => $imageFileName,
+                    "date" => $currentDate,
+                    "timeIn" => $currentTime
+                ]);
+                $message = "Successfully Time-in recorded!";
+
+            } elseif (!$attendance["timeOut"] || $attendance["timeOut"] === "00:00:00") {
+                // --- TIME OUT ---
+                $dbconnection->table("ojt_attendances")
+                    ->where("attendanceId", $attendance["attendanceId"])
+                    ->update([
+                        "imgTimeOut" => $imageFileName,
+                        "timeOut" => $currentTime,
+                        "status" => OjtAttendances::PRESENT_STATUS
                     ]);
-                    $message = "Successfully Time-in recorded!";
+                $message = "Successfully Time-out recorded!";
+            } else {
+                $message = "Attendance already completed today!";
+            }
 
-                } elseif(!$attendance["timeOut"] || $attendance["timeOut"] === "00:00:00"){
-                    // --- TIME OUT ---
-                    $dbconnection->table("ojt_attendances")
-                        ->where("attendanceId", $attendance["attendanceId"])
-                        ->update([
-                            "imgTimeOut" => $imageFileName,
-                            "timeOut" => $currentTime,
-                            "status" => OjtAttendances::PRESENT_STATUS
-                        ]);
-                        
-                    $message = "Successfully Time-out recorded!";
-                }else{
-                    $message = "Attendance already completed today!";
-                }
-
-            $dbconnection->transComplete();    
+            $dbconnection->transComplete();
             if ($dbconnection->transStatus() === FALSE) {
-                return $this->response->setJSON(["success" => false, "message" => "Internal server error1"]);
+                return $this->response->setJSON(["success" => false, "message" => "Internal server error"]);
             }
 
             return $this->response->setJSON(["success" => true, "message" => $message, "imageFileName" => $imageFileName]);
@@ -82,4 +78,12 @@ class AttendanceController extends BaseController
             return $this->response->setJSON(["success" => false, "message" => $th->getMessage()]);
         }
     }
+
+    public function fetchAllAttendance()
+    {
+        $attendanceModel = new OjtAttendances();
+        $attendances = $attendanceModel->fetchAllAttendance();
+        return $this->response->setJSON($attendances);
+    }
+
 }

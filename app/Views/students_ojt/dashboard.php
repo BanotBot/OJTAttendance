@@ -44,9 +44,11 @@
     }
 
     #ojt-attendance-container #webcam {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        width: 100% !important;
+        height: 100% !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     #ojt-attendance-container .scanner-overlay {

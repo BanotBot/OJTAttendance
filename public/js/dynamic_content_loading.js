@@ -34,7 +34,11 @@ async function loadPageView(page)
         const result = await response.text();
         document.getElementById("main_content").innerHTML = result;
 
-        loadScript();
+        if (page === "dashboard") {
+            loadScript();
+        }else if (page === "attendance") {
+            fetchAttendanceTable();
+        }
 
     } catch (error) {
         console.error("Error loading page: ", error);

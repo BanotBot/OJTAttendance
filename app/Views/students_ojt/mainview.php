@@ -104,6 +104,7 @@
     </script>
     <script src="<?php echo base_url('js/dynamic_content_loading.js')?>"></script>
     <script src="<?php echo base_url('js/students_ojt/camera_attendance.js')?>"></script>
+    <script src="<?php echo base_url('js/students_ojt/attendance.js')?>"></script>
 
 </body>
 </html>
