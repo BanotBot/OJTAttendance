@@ -52,17 +52,18 @@ class AttendanceController extends BaseController
                         "ojtId" => $ojtId,
                         "imgTimeIn" => $imageFileName,
                         "date" => $currentDate,
-                        "timeIn" => $currentTime,
-                        "status" => OjtAttendances::PRESENT_STATUS
+                        "timeIn" => $currentTime
                     ]);
                     $message = "Successfully Time-in recorded!";
 
-                } elseif(!$attendance["timeOut"]){
+                } elseif(!$attendance["timeOut"] || $attendance["timeOut"] === "00:00:00"){
                     // --- TIME OUT ---
                     $dbconnection->table("ojt_attendances")
-                        ->update($attendance["attendanceId"], [
+                        ->where("attendanceId", $attendance["attendanceId"])
+                        ->update([
                             "imgTimeOut" => $imageFileName,
-                            "timeOut" => $currentTime
+                            "timeOut" => $currentTime,
+                            "status" => OjtAttendances::PRESENT_STATUS
                         ]);
                         
                     $message = "Successfully Time-out recorded!";
