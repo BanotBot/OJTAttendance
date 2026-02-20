@@ -18,7 +18,6 @@
 
     table {
         width: 100%;
-        border-color: 1px #0000;
         border-collapse: collapse;
         table-layout: fixed;
         justify-content: center;
@@ -27,16 +26,21 @@
 
     th,
     td {
-        border: 1px solid #0000;
+        border: 1px solid #000;
         padding: 8px;
         text-align: left;
         word-wrap: break-word;
         row-gap: 40px;
     }
 
-    td {
-        font-size: 1.4em;
+    table, th, td {
+        border: 1px solid #000;
     }
+
+    td {
+        font-size: .8em;
+    }
+
 </style>
 
 <body>
@@ -44,7 +48,7 @@
     <main>
         <section>
             <h1>OJT Attendance Report</h1>
-            <table borders="1">
+            <table>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -60,9 +64,9 @@
                         <tr>
                             <td><?php echo esc($data["firstname"] . " " . $data["lastname"]) ?></td>
                             <td><?php echo esc($data["date"]) ?></td>
-                            <td><?php echo esc(AttendanceHelper::get_status($data["timeIn"])) ?></td>
-                            <td><?php echo esc(AttendanceHelper::get_time_12Hour_format($data["timeOut"])) ?></td>
-                            <td><?php echo esc(AttendanceHelper::get_status($data["status"])) ?></td>
+                            <td><?php echo esc(get_status($data["timeIn"])) ?></td>
+                            <td><?php echo esc(get_time_12Hour_format($data["timeOut"])) ?></td>
+                            <td><?php echo esc(get_status($data["status"])) ?></td>
                             <td></td>
                         </tr>
                     <?php } ?>
@@ -70,5 +74,36 @@
             </table>
         </section>
     </main>
+
+    <?php 
+                
+        function get_status($status)
+        {
+            switch($status) {
+                case 3: {
+                    return "PRESENT";
+                }
+
+                case 4: {
+                    return "ABSENT";
+                }
+
+                case 5: {
+                    return "TIME-IN";
+                }
+
+                default: {
+                return "";
+                }
+            }
+        }
+
+        
+        function get_time_12Hour_format($time)
+        {
+            return date("h:i:s A", strtotime($time));
+        }
+    
+    ?>
 </body>
 </html>

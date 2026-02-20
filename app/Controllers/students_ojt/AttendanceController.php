@@ -11,7 +11,6 @@ use App\Helpers\OjtStudentsHelper;
 class AttendanceController extends BaseController
 {
 
-
     public function saveAttendance()
     {
 
@@ -101,5 +100,5 @@ class AttendanceController extends BaseController
             dd($th->getMessage());
         }
     }
-    
+
 }
