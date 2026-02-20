@@ -36,9 +36,7 @@ Webcam.on("error", function(err) {
 
 async function recordAttendance(status)
 {
-    console.log("status", status);
     try {
-
         Webcam.snap(async function(data_uri){
             console.log("Captured Image : ", data_uri);
 

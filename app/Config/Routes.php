@@ -3,6 +3,7 @@
     use CodeIgniter\Router\RouteCollection;
 
     /**
+     * 
      * @var RouteCollection $routes
      * 
     */
@@ -23,6 +24,6 @@
     $routes->get("attendances" , "students_ojt\AttendanceController::fetchAllAttendance");
 
     // --- PDF Routes ---
-    $routes->get("attendances/pdf", "students\AttendanceController::exportAttendance");
+    $routes->get("exportAttendance", "students_ojt\AttendanceController::exportAttendance");
 
 

@@ -3,10 +3,10 @@
 namespace App\Controllers\students_ojt;
 
 use App\Controllers\BaseController;
+use App\Helpers\PdfHelper;
 use App\Models\OjtAttendances;
 use App\Helpers\ImageHelper;
 use App\Helpers\OjtStudentsHelper;
-use PdfHelper;
 
 class AttendanceController extends BaseController
 {
@@ -98,8 +98,8 @@ class AttendanceController extends BaseController
             $pdfHelpers = new PdfHelper();
             $pdfHelpers->exportAttendance(); 
         } catch (\Throwable $th) {
-            $th->getMessage();
+            dd($th->getMessage());
         }
     }
-
+    
 }

@@ -259,9 +259,11 @@
                 </div>
 
                 <div class="export-attendance">
-                    <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn">
-                        <i class="bi bi-printer"></i> Export
-                    </button>
+                    <a href="/OJTAttendance/public/index.php/exportAttendance">
+                        <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn">
+                            <i class="bi bi-printer"></i> Export
+                        </button>
+                    </a>
                 </div>
             </div>
 
@@ -279,7 +281,8 @@
                 <tbody>
 
                     <?php
-                    if (!empty($attendances)) { ?>
+                    if (!empty($attendances)) { 
+                        ?>
                         <?php foreach ($attendances as $data) { ?>
                             <tr class="row-hover">
                                 <td class="table-body-cell">
