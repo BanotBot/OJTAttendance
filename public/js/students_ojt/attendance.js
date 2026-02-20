@@ -43,9 +43,14 @@ function fetchAttendanceTable()
 
 function getStatus(status)
 {
+    console.log(status);
     switch(status){
         case "3" : {
             return "PRESENT";
+        }
+        
+        case "5" : {
+            return "TIME-IN";
         }
 
         default : {

@@ -11,6 +11,8 @@ class OjtAttendances extends Model
     
     public const PRESENT_STATUS = 3;
     public const ABSENT_STATUS = 4;
+    public const TIME_IN = 5;
+
 
     public function fetchAllAttendance()
     {

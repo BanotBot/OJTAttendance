@@ -10,14 +10,18 @@ use App\Helpers\OjtStudentsHelper;
 class AttendanceController extends BaseController
 {
 
+
     public function saveAttendance()
     {
+
+        date_default_timezone_set("Asia/Manila");
 
         $imageHelpersObj = new ImageHelper();
         $attendancesModel = new OjtAttendances();
         $dbconnection = \Config\Database::connect();
 
         try {
+
             $userId = session()->get("userId");
 
             $ojtId = OjtStudentsHelper::getOjtId($userId);
@@ -49,7 +53,8 @@ class AttendanceController extends BaseController
                     "ojtId" => $ojtId,
                     "imgTimeIn" => $imageFileName,
                     "date" => $currentDate,
-                    "timeIn" => $currentTime
+                    "timeIn" => $currentTime,
+                    "status" => OjtAttendances::TIME_IN
                 ]);
                 $message = "Successfully Time-in recorded!";
 
