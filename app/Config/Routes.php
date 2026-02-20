@@ -22,4 +22,7 @@
     $routes->post("saveAttendance", "students_ojt\AttendanceController::saveAttendance");
     $routes->get("attendances" , "students_ojt\AttendanceController::fetchAllAttendance");
 
+    // --- PDF Routes ---
+    $routes->get("attendances/pdf", "students\AttendanceController::exportAttendance");
+
 

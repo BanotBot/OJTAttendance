@@ -257,6 +257,12 @@
                         <input type="text" placeholder="Search students..." class="search-input">
                     </div>
                 </div>
+
+                <div class="export-attendance">
+                    <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn">
+                        <i class="bi bi-printer"></i> Export
+                    </button>
+                </div>
             </div>
 
             <table class="management-table">
@@ -271,8 +277,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <?php 
+
+                    <?php
                     if (!empty($attendances)) { ?>
                         <?php foreach ($attendances as $data) { ?>
                             <tr class="row-hover">
@@ -297,8 +303,9 @@
                                     <span class="status-chip active"><?php echo esc($data["status"]) ?></span>
                                 </td>
                                 <td class="table-body-cell text-right">
-                                    <button
-                                        class="text-[#B38888] font-bold hover:text-[#966D6D] text-xs uppercase tracking-tighter">Profile</button>
+                                    <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn">
+                                        <i class="bi bi-printer"></i> Export
+                                    </button>
                                 </td>
                             </tr>
                         <?php } ?>

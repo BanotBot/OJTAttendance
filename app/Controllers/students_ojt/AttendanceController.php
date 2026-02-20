@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\OjtAttendances;
 use App\Helpers\ImageHelper;
 use App\Helpers\OjtStudentsHelper;
+use PdfHelper;
 
 class AttendanceController extends BaseController
 {
@@ -89,6 +90,16 @@ class AttendanceController extends BaseController
         $attendanceModel = new OjtAttendances();
         $attendances = $attendanceModel->fetchAllAttendance();
         return $this->response->setJSON($attendances);
+    }
+
+    public function exportAttendance()
+    {
+        try {
+            $pdfHelpers = new PdfHelper();
+            $pdfHelpers->exportAttendance(); 
+        } catch (\Throwable $th) {
+            $th->getMessage();
+        }
     }
 
 }
