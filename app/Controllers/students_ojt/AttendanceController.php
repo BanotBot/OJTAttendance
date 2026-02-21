@@ -88,16 +88,33 @@ class AttendanceController extends BaseController
 
     public function fetchAllAttendance()
     {
+        $dateFrom = $this->request->getGet("dateFrom");
+        $dateTo = $this->request->getGet("dateTo");
+
         $attendanceModel = new OjtAttendances();
-        $attendances = $attendanceModel->fetchAllAttendance();
+
+        if ($dateFrom === null && $dateTo === null) {
+            $attendances = $attendanceModel->fetchAllAttendance();
+        } else {
+            $attendances = $attendanceModel
+                    ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
+                    ->where("date >=", $dateFrom)
+                    ->where("date <=", $dateTo)
+                    ->join("ojt_students ojs", "ojt_attendances.ojtId = ojs.ojtId", "inner")
+                    ->orderBy("date", "DESC")
+                    ->findAll();
+        }
+
         return $this->response->setJSON($attendances);
     }
+
+    // public function fetchAllAttendanceWithFiltering
 
     public function exportAttendance()
     {
         try {
             $pdfHelpers = new PdfHelper();
-            $pdfHelpers->exportAttendance(); 
+            $pdfHelpers->exportAttendance();
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }

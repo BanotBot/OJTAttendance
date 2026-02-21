@@ -240,10 +240,10 @@
                 <div class="flex items-center gap-4">
                     <div class="date-range-group">
                         <span class="date-label">From:</span>
-                        <input type="date" class="date-input" name="start_date">
+                        <input type="date" class="date-input" name="start_date" id="dateFrom">
                         <span class="text-gray-300">|</span>
                         <span class="date-label">To:</span>
-                        <input type="date" class="date-input" name="end_date">
+                        <input type="date" class="date-input" name="end_date" id="dateTo">
                     </div>
 
                     <div class="search-wrapper">

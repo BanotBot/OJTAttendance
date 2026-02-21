@@ -37,7 +37,7 @@ async function loadPageView(page)
         if (page === "dashboard") {
             loadScript();
         }else if (page === "attendance") {
-            fetchAttendanceTable();
+            loadAttendanceScript();
         }
 
     } catch (error) {

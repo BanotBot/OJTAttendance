@@ -1,3 +1,70 @@
+
+function loadAttendanceScript()
+{
+    fetchAttendanceTable();
+    loadFilterScript();
+}
+
+function loadFilterScript() 
+{
+
+    $(document).ready(function () {
+        $("#dateFrom, #dateTo").on("change", async function () {
+            console.log("CHANGE WORKING");
+            const dateFrom = $("#dateFrom").val();
+            const dateTo = $("#dateTo").val();
+
+            if (dateFrom && dateTo) {
+                if (dateFrom > dateTo) {
+                    $("#dateTo").val("");
+                    return alert("Date To cannot be earlier than Date From");
+                }
+
+                try {
+
+                    const response = await fetch(`${ATTENDANCES}?dateFrom=${encodeURIComponent(dateFrom)}&dateTo=${encodeURIComponent(dateTo)}`, {
+                        method: "GET"
+                    });
+
+                    const result = await response.json();
+                    console.log(result);
+                    const tbody = document.querySelector('.management-table tbody');
+                    tbody.innerHTML = '';
+                    result.forEach(row => {
+
+                        tbody.innerHTML += `
+                            <tr class="row-hover">
+                                <td class="table-body-cell">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-[#B38888]/10 flex items-center justify-center text-[#966D6D] font-serif italic font-bold">${getFirstLetter(row.firstname)}</div>
+                                        <div>
+                                            <p class="font-semibold text-gray-900 leading-none">${getFullname(row.firstname, row.middlename, row.lastname)}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-body-cell">${row.date}</td>
+                                <td class="table-body-cell">${returnFormattedTime(row.timeIn)}</td>
+                                <td class="table-body-cell">${returnFormattedTime(row.timeOut)}</td>
+                                <td class="table-body-cell"><span class="status-chip active">${getStatus(row.status)}</span></td>
+                                <td class="table-body-cell text-right">
+                                        <button
+                                            class="btn btn-outline-secondary"
+                                            type="button"
+                                            id="editEmpInfoModalBtn">
+                                            <i class="bi bi-printer"></i>
+                                        </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        });
+    });
+}
+
 async function fetchAttendanceTable() {
     const response = await fetch(ATTENDANCES, {
         method: "GET"
@@ -33,7 +100,6 @@ async function fetchAttendanceTable() {
                 </tr>
             `;
     });
-
 }
 
 function getStatus(status) {
