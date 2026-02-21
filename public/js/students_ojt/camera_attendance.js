@@ -54,16 +54,14 @@ async function recordAttendance(status)
             });
 
             const result = await response.json();
-            console.log(result);
-            console.log(response);
             if (!result.success) {
-                alert(result.message);
+                return await showMessage("warning", "Attendance warning", result.message);
             }
 
-            alert(result.message);
+           return await showMessage("error", "Attendance success", result.message);
         });
     } catch (error) {
-        console.error(error);
+       await showMessage("error", "Attendance error", "Internal Server error");
     }
     
 }

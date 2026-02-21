@@ -98,6 +98,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.14.2/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const BASE_URL = "<?php echo base_url("students_ojt/"); ?>";
         const ATTENDANCES = "<?php echo base_url("attendances") ?>";
@@ -107,6 +108,6 @@
     <script src="<?php echo base_url('js/dynamic_content_loading.js')?>"></script>
     <script src="<?php echo base_url('js/students_ojt/camera_attendance.js')?>"></script>
     <script src="<?php echo base_url('js/students_ojt/attendance.js')?>"></script>
-
+    <script src="<?php echo base_url('js/message_utils.js')?>"></script>
 </body>
 </html>

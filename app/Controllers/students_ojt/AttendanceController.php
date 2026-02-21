@@ -47,6 +47,10 @@ class AttendanceController extends BaseController
                 ->where("date", $currentDate)
                 ->first();
 
+            if ($attendance && $attendance['timeOut']) {
+                return $this->response->setJSON(["success" => false, "message" => "You already have an attendance today!"]);
+            }
+
             if (!$attendance) {
                 // --- TIME IN ---
                 $dbconnection->table("ojt_attendances")->insert([
@@ -68,8 +72,6 @@ class AttendanceController extends BaseController
                         "status" => OjtAttendances::PRESENT_STATUS
                     ]);
                 $message = "Successfully Time-out recorded!";
-            } else {
-                $message = "Attendance already completed today!";
             }
 
             $dbconnection->transComplete();

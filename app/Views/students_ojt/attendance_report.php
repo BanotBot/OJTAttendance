@@ -64,7 +64,7 @@
                         <tr>
                             <td><?php echo esc($data["firstname"] . " " . $data["lastname"]) ?></td>
                             <td><?php echo esc($data["date"]) ?></td>
-                            <td><?php echo esc(get_status($data["timeIn"])) ?></td>
+                            <td><?php echo esc(get_time_12Hour_format($data["timeIn"])) ?></td>
                             <td><?php echo esc(get_time_12Hour_format($data["timeOut"])) ?></td>
                             <td><?php echo esc(get_status($data["status"])) ?></td>
                             <td></td>
@@ -101,6 +101,10 @@
         
         function get_time_12Hour_format($time)
         {
+            if(!$time || strtotime($time) === false) {
+                return "";
+            }
+
             return date("h:i:s A", strtotime($time));
         }
     
