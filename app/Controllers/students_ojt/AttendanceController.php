@@ -80,6 +80,8 @@ class AttendanceController extends BaseController
                 return $this->response->setJSON(["success" => false, "message" => "Internal server error"]);
             }
 
+            ImageHelper::
+
             return $this->response->setJSON(["success" => true, "message" => $message, "imageFileName" => $imageFileName]);
         } catch (\Throwable $th) {
             // dd($th->getMessage());

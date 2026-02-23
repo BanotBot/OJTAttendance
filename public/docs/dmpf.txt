@@ -2,3 +2,7 @@ Dompdf: This is a popular, pure-PHP library that excels at converting HTML and C
 Pros: It's great for quick and simple jobs, especially if you already have styled HTML content (like an HTML table) you want to convert directly. It supports most CSS2.1 attributes.
 Cons: It can be slower for large or complex documents and has limited support for modern CSS features like flexbox or grid layouts.
 Best for: Generating invoices, reports, or other dynamic documents where you want to use standard HTML templating.
+
+
+PHP Composer Installation Guide
+# composer require cloudinary/cloudinary_php
