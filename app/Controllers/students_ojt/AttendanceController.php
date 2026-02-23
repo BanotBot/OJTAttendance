@@ -3,10 +3,10 @@
 namespace App\Controllers\students_ojt;
 
 use App\Controllers\BaseController;
-use App\Helpers\PdfHelper;
 use App\Models\OjtAttendances;
 use App\Helpers\ImageHelper;
 use App\Helpers\OjtStudentsHelper;
+use Dompdf\Dompdf;
 
 class AttendanceController extends BaseController
 {
@@ -88,36 +88,60 @@ class AttendanceController extends BaseController
 
     public function fetchAllAttendance()
     {
+        $userId = session()->get("userId");
+        $ojtId = OjtStudentsHelper::getOjtId($userId);
+
         $dateFrom = $this->request->getGet("dateFrom");
         $dateTo = $this->request->getGet("dateTo");
 
         $attendanceModel = new OjtAttendances();
 
         if ($dateFrom === null && $dateTo === null) {
-            $attendances = $attendanceModel->fetchAllAttendance();
+            $attendances = $attendanceModel->fetchAllAttendance($ojtId);
         } else {
             $attendances = $attendanceModel
-                    ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
-                    ->where("date >=", $dateFrom)
-                    ->where("date <=", $dateTo)
-                    ->join("ojt_students ojs", "ojt_attendances.ojtId = ojs.ojtId", "inner")
-                    ->orderBy("date", "DESC")
-                    ->findAll();
+                ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
+                ->where("date >=", $dateFrom)
+                ->where("date <=", $dateTo)
+                ->where("ojs.ojtId", $ojtId)
+                ->join("ojt_students ojs", "ojt_attendances.ojtId = ojs.ojtId", "inner")
+                ->orderBy("date", "DESC")
+                ->findAll();
         }
 
         return $this->response->setJSON($attendances);
     }
 
-    // public function fetchAllAttendanceWithFiltering
-
     public function exportAttendance()
     {
+        $userId = session()->get("userId");
+        $ojtId = OjtStudentsHelper::getOjtId($userId);
+        $dateFrom = $this->request->getGet("dateFrom");
+        $dateTo = $this->request->getGet("dateTo");
+
+        $attendancesModel = new OjtAttendances();
         try {
-            $pdfHelpers = new PdfHelper();
-            $pdfHelpers->exportAttendance();
+            $data["attendance"] = $attendancesModel
+                ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
+                ->join("ojt_students ojs", "ON ojt_attendances.ojtId = ojs.ojtId")
+                ->where("ojs.ojtId", $ojtId)
+                ->where("ojt_attendances.date >=", $dateFrom)
+                ->where("ojt_attendances.date <=", $dateTo)
+                ->orderBy("date", "DESC")
+                ->findAll();
+
+            $html = view("students_ojt/attendance_report", $data);
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper("A4", "portrait");
+            $dompdf->render();
+
+            return $this->response
+                ->setContentType("application/pdf")
+                ->setHeader("Content-Disposition", 'attachment; filename="attendance_report.pdf"')
+                ->setBody($dompdf->output());
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }
     }
-
 }

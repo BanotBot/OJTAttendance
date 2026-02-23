@@ -37,6 +37,7 @@
                                 <div class="text-center mt-3">
                                     <a href="<?php echo site_url("register")?>" class="small">Don't have account ?</a>
                                 </div>
+
                             </form>
                         </div>
                     </div>

@@ -14,12 +14,13 @@ class OjtAttendances extends Model
     public const TIME_IN = 5;
 
 
-    public function fetchAllAttendance()
+    public function fetchAllAttendance($ojtId)
     {
         try {
             return $this
                         ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
                         ->join("ojt_students ojs", "ojt_attendances.ojtId = ojs.ojtId", "inner")
+                        ->where("ojs.ojtId", $ojtId)
                         ->orderBy("date", "DESC")
                         ->findAll();
         } catch (\Throwable $th) {

@@ -7,17 +7,15 @@ function loadAttendanceScript()
 
 function loadFilterScript() 
 {
-
     $(document).ready(function () {
         $("#dateFrom, #dateTo").on("change", async function () {
-            console.log("CHANGE WORKING");
             const dateFrom = $("#dateFrom").val();
             const dateTo = $("#dateTo").val();
 
             if (dateFrom && dateTo) {
                 if (dateFrom > dateTo) {
                     $("#dateTo").val("");
-                    return alert("Date To cannot be earlier than Date From");
+                    return showMessage("warning", "Warning Actions", "Date range invalid, earlier than date from");
                 }
 
                 try {
@@ -27,7 +25,6 @@ function loadFilterScript()
                     });
 
                     const result = await response.json();
-                    console.log(result);
                     const tbody = document.querySelector('.management-table tbody');
                     tbody.innerHTML = '';
                     result.forEach(row => {
@@ -63,6 +60,31 @@ function loadFilterScript()
             }
         });
     });
+}
+
+async function exportAttendance() 
+{
+    const dateFrom = $("#dateFrom").val();
+    const dateTo = $("#dateTo").val();
+
+    try {
+        const response = await fetch(`${EXPORT_ATTENDANCE}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
+            method: "GET"
+        });
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "report.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        window.URL.revokeObjectURL(url);
+    } catch (error) {   
+        console.log(error);
+    }
 }
 
 async function fetchAttendanceTable() {
@@ -103,7 +125,6 @@ async function fetchAttendanceTable() {
 }
 
 function getStatus(status) {
-    console.log(status);
     switch (status) {
         case "3": {
             return "PRESENT";

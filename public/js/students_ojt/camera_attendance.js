@@ -58,7 +58,7 @@ async function recordAttendance(status)
                 return await showMessage("warning", "Attendance warning", result.message);
             }
 
-           return await showMessage("error", "Attendance success", result.message);
+           return await showMessage("success", "Attendance success", result.message);
         });
     } catch (error) {
        await showMessage("error", "Attendance error", "Internal Server error");
