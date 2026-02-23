@@ -65,18 +65,22 @@ function loadFilterScript()
 async function exportAttendance() 
 {
     const dateFrom = $("#dateFrom").val();
-    const dateTo = $("#dateTo").val();
+    const dateTo = $("#dateTo").val(); 
 
     try {
         const response = await fetch(`${EXPORT_ATTENDANCE}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
-            method: "GET"
+            method: "GET",
+            credentials: "include"
         });
 
         const blob = await response.blob();
+        // console.log(blob);
+        // return;
+        
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "report.pdf";
+        a.download = "Attendance Report.pdf";
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -165,13 +169,4 @@ function returnFormattedTime(time) {
         second: "2-digit",
         hour12: true
     });
-}
-
-async function exportAttendance() {
-    const CONTEXT_PATH = "/" + window.location.pathname.split("/")[1];
-    try {
-        window.location.href = `${CONTEXT_PATH}/`;
-    } catch (error) {
-        console.error(error);
-    }
 }
