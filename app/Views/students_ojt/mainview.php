@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,7 @@
                 extend: {
                     colors: {
                         ethereal: '#4518e4',
-                        etherealDark: '#4518e4', 
+                        etherealDark: '#4518e4',
                         bgWarm: '#F9F7F7',
                         surface: '#FFFFFF'
                     },
@@ -27,22 +28,16 @@
                         serif: ['Playfair Display', 'serif'],
                     }
                 }
-            }
+            }   
         };
     </script>
-
-    <style type="style/tailwindcss">
-        @layer base{
-            body {
-                @apply bg-warm font-sans text-gray-800 antialised;
-            }
-
-            ::-webkit-scrollbar: {
-                width: 50px;    
-            }
-
-            ::-webkit-scrollbar-thumb { 
-                @apply bg-ethereal rounded-full; 
+    <style type="text/tailwindcss">
+        @layer base {
+                body { @apply
+                       bg-bgWarm font-sans text-gray-800 antialiased; }
+                    ::-webkit-scrollbar { width: 5px; }
+                    ::-webkit-scrollbar-thumb { 
+                        @apply bg-ethereal rounded-full; }
             }
 
             @layer components {
@@ -52,10 +47,11 @@
                 .nav-link.active { @apply
                     bg-ethereal/10 text-ethereal font-semibold;
                 }
+                
             }
-        }
-    </style>
+        </style>
 </head>
+
 <body>
 
     <main class="flex min-h-screen">
@@ -70,7 +66,7 @@
                     <i class="fas fa-chart-pie w-5 text-center"></i> Dashboard
                 </a>
                 <a href="#" class="nav-link" data-page="attendance">
-                    <i class="fas fa-clock w-5 text-center"></i> Attendance 
+                    <i class="fas fa-clock w-5 text-center"></i> Attendance
                 </a>
                 <a href="#" class="nav-link" data-page="report">
                     <i class="fas fa-line-chart w-5 text-center"></i> Report
@@ -79,23 +75,31 @@
 
             <section class="p-6 mt-auto border-t border-gray-50">
                 <div class="bg-gray-50 rounded-2xl p-4 flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-ethereal flex items-center justify-center text-white font-serif shadow-sm">A</div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-ethereal flex items-center justify-center text-white font-serif shadow-sm">
+                        A</div>
                     <div class="overflow-hidden">
                         <p class="text-sm font-bold truncate text-gray-900">Ivan Dave Besere</p>
                         <p class="text-[10px] text-gray-400 uppercase tracking-tighter font-bold">Full Access</p>
                     </div>
                 </div>
             </section>
-            
+
         </aside>
         <section id="main_content" class="flex-1 bg-bgWarm p-8 overflow-y-auto"></section>
     </main>
 
-    <!-- Dependencies --> 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.14.2/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -105,9 +109,10 @@
         const SAVE_ATTENDANCE_URL = "<?php echo base_url("saveAttendance") ?>";
         const EXPORT_ATTENDANCE = "<?php echo base_url("exportAttendance") ?>";
     </script>
-    <script src="<?php echo base_url('js/dynamic_content_loading.js')?>"></script>
-    <script src="<?php echo base_url('js/students_ojt/camera_attendance.js')?>"></script>
-    <script src="<?php echo base_url('js/students_ojt/attendance.js')?>"></script>
-    <script src="<?php echo base_url('js/message_utils.js')?>"></script>
+    <script src="<?php echo base_url('js/dynamic_content_loading.js') ?>"></script>
+    <script src="<?php echo base_url('js/students_ojt/camera_attendance.js') ?>"></script>
+    <script src="<?php echo base_url('js/students_ojt/attendance.js') ?>"></script>
+    <script src="<?php echo base_url('js/message_utils.js') ?>"></script>
 </body>
+
 </html>
