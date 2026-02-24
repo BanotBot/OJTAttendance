@@ -4,8 +4,10 @@ namespace App\Helpers;
 
 use Cloudinary\Cloudinary;
 use Exception;
+
 class ImageHelper
 {
+    
     public function generateFileName($imageFile)
     {
         $image = str_replace("data:image/\w+;base64,#i", '', $imageFile);
@@ -26,19 +28,6 @@ class ImageHelper
         }
 
         return $fileName;
-    }
-
-    public static function upload_img_to_cloud($imageFileName)
-    {
-        $cloudinary = new Cloudinary([
-            "cloud" => [
-                "cloudName" => env("cloudinary.CLOUD_NAME"),
-                "cloudApi" => env("cloudinary.API_KEY"),
-                "cloudSecret" => env("cloudinary.API_SECRET")
-            ],
-        ]);
-
-        $result = $cloudinary->uploadApi()->upload($imageFileName);
     }
 
     private function upload_img_to_dir($filePath, $imageData)

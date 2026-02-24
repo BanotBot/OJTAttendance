@@ -5,87 +5,118 @@ namespace App\Controllers\students_ojt;
 use App\Controllers\BaseController;
 use App\Helpers\PdfHelper;
 use App\Models\OjtAttendances;
-use App\Helpers\ImageHelper;
 use App\Helpers\OjtStudentsHelper;
-use Dompdf\Dompdf;
+use App\Helpers\CloudinaryHelper;
 
 class AttendanceController extends BaseController
 {
 
     public function saveAttendance()
     {
-
         date_default_timezone_set("Asia/Manila");
 
-        $imageHelpersObj = new ImageHelper();
-        $attendancesModel = new OjtAttendances();
-        $dbconnection = \Config\Database::connect();
+        $cloudinaryHelper = new CloudinaryHelper();
+        $attendanceModel = new OjtAttendances();
+        $db = \Config\Database::connect();
 
         try {
 
             $userId = session()->get("userId");
-
             $ojtId = OjtStudentsHelper::getOjtId($userId);
-            if ($ojtId === null) {
-                return $this->response->setJSON(["success" => false, "message" => "Invalid request. Please try again or login again!"]);
+
+            if (!$ojtId) {
+                return $this->response->setJSON([
+                    "success" => false,
+                    "message" => "Invalid session. Please login again."
+                ]);
             }
 
             $data = $this->request->getJSON(true);
-            $dataFile = $data["imageFile"] ?? null;
+            $imageFile = $data["imageFile"] ?? null;
 
-            if ($dataFile === null) {
-                return $this->response->setJSON(["success" => false, "message" => "Image file does not have a value"]);
+            if (!$imageFile) {
+                return $this->response->setJSON([
+                    "success" => false,
+                    "message" => "Image file is required."
+                ]);
             }
 
-            $imageFileName = $imageHelpersObj->generateFileName($dataFile);
-            $currentDate = date("Y-m-d"); // 2026-02-17
-            $currentTime = date("H:i:s"); // 24 hour format
+            $currentDate = date("Y-m-d");
+            $currentTime = date("H:i:s");
 
-            $dbconnection->transStart();
+            $db->transStart();
 
-            $attendance = $attendancesModel
+            // Check if attendance already exists for today
+            $attendance = $attendanceModel
                 ->where("ojtId", $ojtId)
                 ->where("date", $currentDate)
                 ->first();
 
-            if ($attendance && $attendance['timeOut']) {
-                return $this->response->setJSON(["success" => false, "message" => "You already have an attendance today!"]);
+            // Upload to Cloudinary
+            $uploadResult = $cloudinaryHelper->upload($imageFile);
+            $imageUrl = $uploadResult["secure_url"] ?? null;
+
+            if (!$imageUrl) {
+                return $this->response->setJSON([
+                    "success" => false,
+                    "message" => "Cloudinary upload failed.",
+                    "debug" => $uploadResult 
+                ]);
             }
 
+            $publicId = $uploadResult["public_id"] ?? null;
+            $filename = $uploadResult["original_filename"] ?? null;
+
             if (!$attendance) {
-                // --- TIME IN ---
-                $dbconnection->table("ojt_attendances")->insert([
+                // ================= TIME IN =================
+                $db->table("ojt_attendances")->insert([
                     "ojtId" => $ojtId,
-                    "imgTimeIn" => $imageFileName,
+                    "imgUrlTimeIn" => $imageUrl,
+                    "publicIdTimeIn" => $publicId,
+                    "fileNameTimeIn" => $filename,
                     "date" => $currentDate,
                     "timeIn" => $currentTime,
                     "status" => OjtAttendances::TIME_IN
                 ]);
                 $message = "Successfully Time-in recorded!";
-
-            } elseif (!$attendance["timeOut"] || $attendance["timeOut"] === "00:00:00") {
-                // --- TIME OUT ---
-                $dbconnection->table("ojt_attendances")
+            } elseif (empty($attendance["timeOut"]) || $attendance["timeOut"] === "00:00:00") {
+                // ================= TIME OUT =================
+                $db->table("ojt_attendances")
                     ->where("attendanceId", $attendance["attendanceId"])
                     ->update([
-                        "imgTimeOut" => $imageFileName,
+                        "imgUrlTimeOut" => $imageUrl,
+                        "publicIdTimeOut" => $publicId,
+                        "fileNameTimeOut" => $filename,
                         "timeOut" => $currentTime,
                         "status" => OjtAttendances::PRESENT_STATUS
                     ]);
                 $message = "Successfully Time-out recorded!";
+            } else {
+                return $this->response->setJSON([
+                    "success" => false,
+                    "message" => "You already completed attendance today."
+                ]);
             }
 
-            $dbconnection->transComplete();
-            if ($dbconnection->transStatus() === FALSE) {
-                return $this->response->setJSON(["success" => false, "message" => "Internal server error"]);
+            $db->transComplete();
+
+            if (!$db->transStatus()) {
+                return $this->response->setJSON([
+                    "success" => false,
+                    "message" => "Database transaction failed."
+                ]);
             }
 
-            ImageHelper::
+            return $this->response->setJSON([
+                "success" => true,
+                "message" => $message
+            ]);
 
-            return $this->response->setJSON(["success" => true, "message" => $message, "imageFileName" => $imageFileName]);
-        } catch (\Throwable $th) {
-            // dd($th->getMessage());
-            return $this->response->setJSON(["success" => false, "message" => $th->getMessage()]);
+        } catch (\Throwable $e) {
+            return $this->response->setJSON([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
         }
     }
 
