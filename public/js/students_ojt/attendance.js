@@ -74,8 +74,6 @@ async function exportAttendance()
         });
 
         const blob = await response.blob();
-        // console.log(blob);
-        // return;
         
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -97,6 +95,7 @@ async function fetchAttendanceTable() {
     });
 
     const result = await response.json();
+    console.log(result);
     const tbody = document.querySelector('.management-table tbody');
     tbody.innerHTML = '';
     result.forEach(row => {

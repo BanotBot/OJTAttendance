@@ -18,7 +18,7 @@ class OjtAttendances extends Model
     {
         try {
             return $this
-                        ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
+                        ->select("ojt_attendances.attendanceId, ojt_attendances.fileNameTimeIn, ojt_attendances.fileNameTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
                         ->join("ojt_students ojs", "ojt_attendances.ojtId = ojs.ojtId", "inner")
                         ->where("ojs.ojtId", $ojtId)
                         ->orderBy("date", "DESC")
@@ -32,7 +32,7 @@ class OjtAttendances extends Model
     {
         try {
             return $this 
-                ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
+                ->select("ojt_attendances.attendanceId, ojt_attendances.fileNameTimeIn, ojt_attendances.fileNameTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
                 ->join("ojt_students ojs", "ON ojt_attendances.ojtId = ojs.ojtId", "inner")
                 ->where("ojs.ojtId", $ojtId)
                 ->where("ojt_attendances.date >=", $dateFrom)

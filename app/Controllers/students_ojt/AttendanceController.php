@@ -44,14 +44,19 @@ class AttendanceController extends BaseController
             $currentDate = date("Y-m-d");
             $currentTime = date("H:i:s");
 
-            $db->transStart();
-
             // Check if attendance already exists for today
             $attendance = $attendanceModel
                 ->where("ojtId", $ojtId)
                 ->where("date", $currentDate)
                 ->first();
 
+            if ($attendance && !empty($attendance["timeOut"]) && $attendance["timeOut"] !== "00:00:00") {
+                return $this->response->setJSON([
+                    "success" => false,
+                    "message" => "You already completed attendance today."
+                ]);
+            }
+            
             // Upload to Cloudinary
             $uploadResult = $cloudinaryHelper->upload($imageFile);
             $imageUrl = $uploadResult["secure_url"] ?? null;
@@ -60,13 +65,16 @@ class AttendanceController extends BaseController
                 return $this->response->setJSON([
                     "success" => false,
                     "message" => "Cloudinary upload failed.",
-                    "debug" => $uploadResult 
+                    "debug" => $uploadResult
                 ]);
             }
-
+            
             $publicId = $uploadResult["public_id"] ?? null;
-            $filename = $uploadResult["original_filename"] ?? null;
+            $filename = $uploadResult["original_filename"] 
+                            ?? pathinfo($publicId, PATHINFO_BASENAME) 
+                            ?? uniqid("attendance_");
 
+            $db->transStart();
             if (!$attendance) {
                 // ================= TIME IN =================
                 $db->table("ojt_attendances")->insert([
@@ -78,6 +86,7 @@ class AttendanceController extends BaseController
                     "timeIn" => $currentTime,
                     "status" => OjtAttendances::TIME_IN
                 ]);
+
                 $message = "Successfully Time-in recorded!";
             } elseif (empty($attendance["timeOut"]) || $attendance["timeOut"] === "00:00:00") {
                 // ================= TIME OUT =================
@@ -92,6 +101,7 @@ class AttendanceController extends BaseController
                     ]);
                 $message = "Successfully Time-out recorded!";
             } else {
+                $db->transRollback();
                 return $this->response->setJSON([
                     "success" => false,
                     "message" => "You already completed attendance today."
@@ -101,9 +111,12 @@ class AttendanceController extends BaseController
             $db->transComplete();
 
             if (!$db->transStatus()) {
+                $error = $db->error();
+                log_message('error', json_encode($error));
                 return $this->response->setJSON([
                     "success" => false,
-                    "message" => "Database transaction failed."
+                    "message" => "Database transaction failed.",
+                    "debug" => $error
                 ]);
             }
 
@@ -113,6 +126,7 @@ class AttendanceController extends BaseController
             ]);
 
         } catch (\Throwable $e) {
+            $db->transRollback();
             return $this->response->setJSON([
                 "success" => false,
                 "message" => $e->getMessage()
@@ -134,7 +148,7 @@ class AttendanceController extends BaseController
             $attendances = $attendanceModel->fetchAllAttendance($ojtId);
         } else {
             $attendances = $attendanceModel
-                ->select("ojt_attendances.attendanceId, ojt_attendances.imgTimeIn, ojt_attendances.imgTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
+                ->select("ojt_attendances.attendanceId, ojt_attendances.fileNameTimeIn, ojt_attendances.fileNameTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
                 ->where("date >=", $dateFrom)
                 ->where("date <=", $dateTo)
                 ->where("ojs.ojtId", $ojtId)
@@ -174,4 +188,5 @@ class AttendanceController extends BaseController
                 ->setBody($generatedPdf->output());
         }
     }
+
 }
