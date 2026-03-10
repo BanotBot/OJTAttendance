@@ -84,7 +84,7 @@ class AttendanceController extends BaseController
                     "fileNameTimeIn" => $filename,
                     "date" => $currentDate,
                     "timeIn" => $currentTime,
-                    "status" => OjtAttendances::TIME_IN
+                    "status" => ATTENDANCE_TIME_IN
                 ]);
 
                 $message = "Successfully Time-in recorded!";
@@ -97,7 +97,7 @@ class AttendanceController extends BaseController
                         "publicIdTimeOut" => $publicId,
                         "fileNameTimeOut" => $filename,
                         "timeOut" => $currentTime,
-                        "status" => OjtAttendances::PRESENT_STATUS
+                        "status" => ATTENDANCE_PRESENT
                     ]);
                 $message = "Successfully Time-out recorded!";
             } else {
@@ -139,8 +139,8 @@ class AttendanceController extends BaseController
         $userId = session()->get("userId");
         $ojtId = OjtStudentsHelper::getOjtId($userId);
 
-        $dateFrom = $this->request->getGet("dateFrom");
-        $dateTo = $this->request->getGet("dateTo");
+        $dateFrom =   $this->request->getGet("dateFrom");
+        $dateTo   =   $this->request->getGet("dateTo");
 
         $attendanceModel = new OjtAttendances();
 
