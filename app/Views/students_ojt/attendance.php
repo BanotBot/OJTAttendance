@@ -234,35 +234,47 @@
         </header>
 
         <article class="glass-card">
+            <div class="table-toolbar d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-            <div class="table-toolbar">
-                <div class="flex items-center gap-4">
-                    <div class="date-range-group">
-                        <span class="date-label">From:</span>
-                        <input type="date" class="date-input" name="start_date" id="dateFrom">
-                        <span class="text-gray-300">|</span>
-                        <span class="date-label">To:</span>
-                        <input type="date" class="date-input" name="end_date" id="dateTo">
-                    </div>
+                <!-- Filters -->
+                <div class="d-flex align-items-center flex-wrap gap-2">
 
-                    <div class="search-wrapper">
-                        <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </span>
-                        <input type="text" placeholder="Search students..." class="search-input">
-                    </div>
+                    <!-- Month -->
+                    <select id="monthFilter" class="form-select form-select-sm" style="width:150px;">
+                        <option value="">Select Month</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+
+                    <!-- Year -->
+                    <select id="yearFilter" class="form-select form-select-sm" style="width:120px;">
+                        <option value="">Select Year</option>
+                    </select>
+
+                    <!-- Filter Button -->
+                    <button type="button" class="btn btn-primary btn-sm" id="btnAttendanceFilter">
+                        Apply Filter
+                    </button>
+
                 </div>
 
-                <div class="export-attendance">
-                    <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn"
-                        onclick="exportAttendance()">
+                <!-- Export Button -->
+                <div>
+                    <button class="btn btn-outline-primary btn-sm" type="button" onclick="exportAttendance()">
                         <i class="bi bi-printer"></i> Export
                     </button>
                 </div>
+
             </div>
 
             <table class="management-table">

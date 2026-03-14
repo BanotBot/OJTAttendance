@@ -139,34 +139,24 @@ class AttendanceController extends BaseController
         $userId = session()->get("userId");
         $ojtId = OjtStudentsHelper::getOjtId($userId);
 
-        $dateFrom = $this->request->getGet("dateFrom");
-        $dateTo = $this->request->getGet("dateTo");
-        $page = $this->request->getGet("page") ?? 1; // current page
-        $perPage = PAGE_LIMIT; // how many data in the page
-        $offset = ($page - 1) * $perPage;
+        $monthFilter = $this->request->getGet("month");
+        $yearFilter = $this->request->getGet("year");
 
         $attendanceModel = new AttendanceModel();
-
         $arguments = [
             "ojtId" => $ojtId,
-            "dateFrom" => $dateFrom,
-            "dateTo" => $dateTo,
-            "perPage" => $perPage,
-            "offset" => $offset
+            "monthFilter" => $monthFilter,
+            "yearFilter" => $yearFilter,
         ];
 
-        if ($dateFrom && $dateTo) {
+        if ($monthFilter && $yearFilter) {
             $attendances = $attendanceModel->getAttendanceWDateRange($arguments);
         } else {
             $attendances = $attendanceModel->getAllAttendance($arguments);
         }
 
-        $totalPages = $attendanceModel->countAllTotalPages($arguments);
-
-        return $this->response->setJSON([
-            "data" => $attendances,
-            "totalPages" => $totalPages,
-            "currentPage" => $perPage
+        return $this->response->setJSON([ 
+            "data" => $attendances
         ]);
     }
 

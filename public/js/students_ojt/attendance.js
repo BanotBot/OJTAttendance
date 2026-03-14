@@ -1,46 +1,70 @@
 function loadAttendanceScript() {
     $(document).ready(function () {
-        $("#dateFrom, #dateTo").on("change", async function () {
-            const dateFrom = $("#dateFrom").val();
-            const dateTo = $("#dateTo").val();
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
 
-            if (dateFrom && dateTo) {
-                if (dateFrom > dateTo) {
-                    $("#dateTo").val("");
-                    return showMessage("warning", "Warning Actions", "Date range invalid, earlier than date from");
-                }
-                fetchAttendanceTable(1);
-            }
+        const monthFilter = document.getElementById("monthFilter");
+        const yearFilter = document.getElementById("yearFilter");
+
+        $("#btnAttendanceFilter").on("click", function () {
+            const monthFilter = $("#monthFilter").val();
+            const yearFilter = $("#yearFilter").val();
+            fetchAttendanceTable(monthFilter, yearFilter);
         });
 
-        fetchAttendanceTable(1);
+        populateYear([yearFilter]);
+        defaultValueFilter([monthFilter], [yearFilter]);
+        fetchAttendanceTable(currentMonth, currentYear);
     });
 }
 
-async function fetchAttendanceTable(page) {
+function populateYear(selectIds) {
+    const START_YEAR = 1990;
+    const ADVANCED_YEAR = 80;
+    const currentYear = new Date().getFullYear() + ADVANCED_YEAR;
 
-    const dateFrom = $("#dateFrom").val();
-    const dateTo = $("#dateTo").val();
-
-    let response;
-
-    if (dateFrom && dateTo) {
-        if (dateFrom > dateTo) {
-            $("#dateTo").val("");
-            return showMessage("warning", "Warning Actions", "Date range invalid, earlier than date from");
+    selectIds.forEach(select => {
+        if (!select) {
+            return;
         }
 
-        response = await fetch(`${ATTENDANCES}?page=${page}&dateFrom=${encodeURIComponent(dateFrom)}&dateTo=${encodeURIComponent(dateTo)}`, {
-            method: "GET"
-        });
+        for (let year = currentYear; year >= START_YEAR; year--) {
+            let option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            select.appendChild(option);
+        }
+    });
+}
 
-    } else {
-        response = await fetch(ATTENDANCES, {
-            method: "GET"
-        });
-    }
+function defaultValueFilter(selectIdsMonth, selectIdsYear) {
+    const now = new Date();
+
+    const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+    const currentYear = now.getFullYear();
+
+    selectIdsMonth.forEach(monthId => {
+        if (!monthId) {
+            return;
+        }
+        monthId.value = currentMonth;
+    });
+
+    selectIdsYear.forEach(yearId => {
+        if (!yearId) {
+            return;
+        }
+        yearId.value = currentYear;
+    });
+}
+
+async function fetchAttendanceTable(monthFilter, yearFilter) {
 
     try {
+        const response = await fetch(`${ATTENDANCES}?month=${encodeURIComponent(monthFilter)}&year=${encodeURIComponent(yearFilter)}`, {
+            method: "GET"
+        });
         const result = await response.json();
         console.log(result);
         const tbody = document.querySelector('.management-table tbody');
@@ -72,35 +96,8 @@ async function fetchAttendanceTable(page) {
             `;
         });
 
-        renderPagination(result.totalPages, result.currentPage);
     } catch (error) {
         console.log(error);
-    }
-}
-
-function renderPagination(totalPages, currentPage) {
-    const paginationContainer = document.getElementById("pagination");
-    paginationContainer.innerHTML = "";
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.classList.add(
-            'w-8', 'h-8', 'flex', 'items-center', 'justify-center',
-            'rounded', 'bg-white', 'border', 'border-gray-100',
-            'text-gray-400', 'hover:text-[#B38888]'
-        );
-
-        if (i === currentPage) {
-            btn.classList.add('bg-[#B38888]', 'text-white');
-            btn.disabled = true;
-        }
-
-        btn.addEventListener("click", function () {
-            loadFilterScript(i);
-        });
-
-        paginationContainer.appendChild(btn);
     }
 }
 
