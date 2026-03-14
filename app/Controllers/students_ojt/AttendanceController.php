@@ -4,7 +4,7 @@ namespace App\Controllers\students_ojt;
 
 use App\Controllers\BaseController;
 use App\Helpers\PdfHelper;
-use App\Models\OjtAttendances;
+use App\Models\AttendanceModel;
 use App\Helpers\OjtStudentsHelper;
 use App\Helpers\CloudinaryHelper;
 
@@ -16,7 +16,7 @@ class AttendanceController extends BaseController
         date_default_timezone_set("Asia/Manila");
 
         $cloudinaryHelper = new CloudinaryHelper();
-        $attendanceModel = new OjtAttendances();
+        $attendanceModel = new AttendanceModel();
         $db = \Config\Database::connect();
 
         try {
@@ -56,7 +56,7 @@ class AttendanceController extends BaseController
                     "message" => "You already completed attendance today."
                 ]);
             }
-            
+
             // Upload to Cloudinary
             $uploadResult = $cloudinaryHelper->upload($imageFile);
             $imageUrl = $uploadResult["secure_url"] ?? null;
@@ -68,11 +68,11 @@ class AttendanceController extends BaseController
                     "debug" => $uploadResult
                 ]);
             }
-            
+
             $publicId = $uploadResult["public_id"] ?? null;
-            $filename = $uploadResult["original_filename"] 
-                            ?? pathinfo($publicId, PATHINFO_BASENAME) 
-                            ?? uniqid("attendance_");
+            $filename = $uploadResult["original_filename"]
+                ?? pathinfo($publicId, PATHINFO_BASENAME)
+                ?? uniqid("attendance_");
 
             $db->transStart();
             if (!$attendance) {
@@ -139,25 +139,35 @@ class AttendanceController extends BaseController
         $userId = session()->get("userId");
         $ojtId = OjtStudentsHelper::getOjtId($userId);
 
-        $dateFrom =   $this->request->getGet("dateFrom");
-        $dateTo   =   $this->request->getGet("dateTo");
+        $dateFrom = $this->request->getGet("dateFrom");
+        $dateTo = $this->request->getGet("dateTo");
+        $page = $this->request->getGet("page") ?? 1; // current page
+        $perPage = PAGE_LIMIT; // how many data in the page
+        $offset = ($page - 1) * $perPage;
 
-        $attendanceModel = new OjtAttendances();
+        $attendanceModel = new AttendanceModel();
 
-        if ($dateFrom === null && $dateTo === null) {
-            $attendances = $attendanceModel->fetchAllAttendance($ojtId);
+        $arguments = [
+            "ojtId" => $ojtId,
+            "dateFrom" => $dateFrom,
+            "dateTo" => $dateTo,
+            "perPage" => $perPage,
+            "offset" => $offset
+        ];
+
+        if ($dateFrom && $dateTo) {
+            $attendances = $attendanceModel->getAttendanceWDateRange($arguments);
         } else {
-            $attendances = $attendanceModel
-                ->select("ojt_attendances.attendanceId, ojt_attendances.fileNameTimeIn, ojt_attendances.fileNameTimeOut, ojt_attendances.date, ojt_attendances.timeIn, ojt_attendances.timeOut, ojt_attendances.status, ojs.firstname, ojs.middlename, ojs.lastname")
-                ->where("date >=", $dateFrom)
-                ->where("date <=", $dateTo)
-                ->where("ojs.ojtId", $ojtId)
-                ->join("ojt_students ojs", "ojt_attendances.ojtId = ojs.ojtId", "inner")
-                ->orderBy("date", "DESC")
-                ->findAll();
+            $attendances = $attendanceModel->getAllAttendance($arguments);
         }
 
-        return $this->response->setJSON($attendances);
+        $totalPages = $attendanceModel->countAllTotalPages($arguments);
+
+        return $this->response->setJSON([
+            "data" => $attendances,
+            "totalPages" => $totalPages,
+            "currentPage" => $perPage
+        ]);
     }
 
     public function exportAttendance()
@@ -167,7 +177,7 @@ class AttendanceController extends BaseController
         $dateFrom = $this->request->getGet("dateFrom");
         $dateTo = $this->request->getGet("dateTo");
 
-        $attendancesModel = new OjtAttendances();
+        $attendancesModel = new AttendanceModel();
 
         if (empty($dateFrom) && empty($dateTo)) {
             $data["attendance"] = $attendancesModel->fetchAllAttendance($ojtId);

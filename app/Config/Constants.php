@@ -78,9 +78,15 @@ defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database 
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
 
-/**
- *  ----- Application Use ---- 
-*/
+/** ----- Application Use ---- */
+define("ADMIN","ADMIN");
+define("OJT","OJT");
+
+define("ACTIVE_STATUS", 1);
+define("INACTIVE_STATUS", 2);
 define("ATTENDANCE_PRESENT", 1);
 define("ATTENDANCE_ABSENT", 4);
 define("ATTENDANCE_TIME_IN", 5);
+
+define("PAGE_LIMIT", 10);
+

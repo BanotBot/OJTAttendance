@@ -1,62 +1,82 @@
 <?php
 
-    namespace App\Controllers;
+namespace App\Controllers;
 
-    use App\Models\OjtStudentsModel;
-    use App\Models\Users;
+use App\Models\OjtStudentsModel;
+use App\Models\Users;
+use Config\Database;
 
-    class Register extends BaseController
+class Register extends BaseController
+{
+    public function index()
     {
-        public function index()
-        {
-            return view("register");
-        }
+        return view("register");
+    }
 
-        public function auth()
-        {
+    public function auth()
+    {
 
-            $firstName = $this->request->getPost("firstName");
-            $middleName = $this->request->getPost("middleName");
-            $lastName = $this->request->getPost("lastName");
-            $address = $this->request->getPost("address");
-            $contactNumber = $this->request->getPost("contactNumber");
-            $username = $this->request->getPost("username");
-            $password = $this->request->getPost("password");
+        $firstName = $this->request->getPost("firstName");
+        $middleName = $this->request->getPost("middleName");
+        $lastName = $this->request->getPost("lastName");
+        $address = $this->request->getPost("address");
+        $contactNumber = $this->request->getPost("contactNumber");
+        $username = $this->request->getPost("username");
+        $password = $this->request->getPost("password");
 
-            $usersModel = new Users();
-            $ojtStudentsModel = new OjtStudentsModel();
+        $usersModel = new Users();
+        $ojtStudentsModel = new OjtStudentsModel();
+        $db = Database::connect();
 
-            $rules = [
-                "username" => "required",
-                "password" => "required",
-                "firstName" => "required",
-                "middleName" => "required",
-                "lastName" => "required",
-                "address" => "required",
-                "contactNumber" => "required"
-            ];
+        try {
 
-            if (!$this->validate($rules)) {
-                dd($this->validator->getErrors());
-                return redirect()->back()->withInput();
+            $db->transStart();
+
+                $rules = [
+                    "username" => "required",
+                    "password" => "required",
+                    "firstName" => "required",
+                    "middleName" => "required",
+                    "lastName" => "required",
+                    "address" => "required",
+                    "contactNumber" => "required"
+                ];
+
+                if (!$this->validate($rules)) {
+                    dd($this->validator->getErrors());
+                    return redirect()->back()->withInput();
+                }
+
+                $usersModel->insert([
+                    "username" => $username,
+                    "password" => $password,
+                    "role" => OJT
+                ]);
+
+                $userId = $usersModel->getInsertID();
+                $ojtStudentsModel->insert([
+                    "userId" => $userId,
+                    "firstName" => $firstName,
+                    "middleName" => $middleName,
+                    "lastName" => $lastName,
+                    "address" => $address,
+                    "contactNumber" => $contactNumber,
+                    "status" => ACTIVE_STATUS
+                ]);
+
+                $db->transComplete();
+                if ($db->transStatus() === FALSE) {
+                    return $this->response->setJSON(["Database Transaction Failed"]);
+                }
+
+                return redirect()->to(site_url("/"));
+        } catch (\Throwable $th) {
+            $th->getMessage();
+            if ($db != null) {
+                $db->transRollback();
+                $db->close();
             }
-
-            $usersModel->insert([
-                "username" => $username,
-                "password" => $password
-            ]);
-
-            $userId = $usersModel->getInsertID();
-            $ojtStudentsModel->insert([
-                "userId" => $userId,
-                "firstName" => $firstName,
-                "middleName" => $middleName,
-                "lastName" => $lastName,
-                "address" => $address,
-                "contactNumber" => $contactNumber,
-                "status" => OjtStudentsModel::STATUS_ACTIVE
-            ]);
-
-            return redirect()->to(site_url("/"));
         }
     }
+
+}

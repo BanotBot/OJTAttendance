@@ -7,6 +7,6 @@
     {
         protected $table = "users";
         protected $primaryKey = "userId";
-        protected $allowedFields = ["username", "password"];
+        protected $allowedFields = ["username", "password", "role"];
 
     }

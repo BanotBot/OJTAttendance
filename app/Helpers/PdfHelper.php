@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Helpers;
-use App\Models\OjtAttendances;
+use App\Models\AttendanceModel;
 use Dompdf\Dompdf;
 
 class PdfHelper 

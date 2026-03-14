@@ -230,7 +230,6 @@
         <header class="emp-header">
             <section>
                 <h1 class="page-title">Attendance Management</h1>
-                <p class="page-subtitle">Manage your employee attendance.</p>
             </section>
         </header>
 
@@ -259,7 +258,8 @@
                 </div>
 
                 <div class="export-attendance">
-                    <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn" onclick="exportAttendance()">
+                    <button class="btn btn-outline-secondary" type="button" id="editEmpInfoModalBtn"
+                        onclick="exportAttendance()">
                         <i class="bi bi-printer"></i> Export
                     </button>
                 </div>
@@ -315,18 +315,13 @@
                             <td colspan="5" class="text-center">No Data found</td>
                         </tr>
                     <?php } ?>
-
                 </tbody>
             </table>
 
-            <footer class="table-footer">
+            <footer class="table-footer flex items-center justify-between p-2">
                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">© 2026 OJT ATTENDANCE
                     Systems</p>
-                <div class="btn-group">
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded bg-white border border-gray-100 text-gray-400 hover:text-[#B38888]">1</button>
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded bg-white border border-gray-100 text-gray-400 hover:text-[#B38888]">2</button>
+                <div id="pagination" class="btn-group flex gap-1">
                 </div>
             </footer>
 

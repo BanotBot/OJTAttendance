@@ -1,12 +1,4 @@
-
-function loadAttendanceScript()
-{
-    fetchAttendanceTable();
-    loadFilterScript();
-}
-
-function loadFilterScript() 
-{
+function loadAttendanceScript() {
     $(document).ready(function () {
         $("#dateFrom, #dateTo").on("change", async function () {
             const dateFrom = $("#dateFrom").val();
@@ -17,90 +9,44 @@ function loadFilterScript()
                     $("#dateTo").val("");
                     return showMessage("warning", "Warning Actions", "Date range invalid, earlier than date from");
                 }
-
-                try {
-
-                    const response = await fetch(`${ATTENDANCES}?dateFrom=${encodeURIComponent(dateFrom)}&dateTo=${encodeURIComponent(dateTo)}`, {
-                        method: "GET"
-                    });
-
-                    const result = await response.json();
-                    const tbody = document.querySelector('.management-table tbody');
-                    tbody.innerHTML = '';
-                    result.forEach(row => {
-
-                        tbody.innerHTML += `
-                            <tr class="row-hover">
-                                <td class="table-body-cell">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-[#B38888]/10 flex items-center justify-center text-[#966D6D] font-serif italic font-bold">${getFirstLetter(row.firstname)}</div>
-                                        <div>
-                                            <p class="font-semibold text-gray-900 leading-none">${getFullname(row.firstname, row.middlename, row.lastname)}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="table-body-cell">${row.date}</td>
-                                <td class="table-body-cell">${returnFormattedTime(row.timeIn)}</td>
-                                <td class="table-body-cell">${returnFormattedTime(row.timeOut)}</td>
-                                <td class="table-body-cell"><span class="status-chip active">${getStatus(row.status)}</span></td>
-                                <td class="table-body-cell text-right">
-                                        <button
-                                            class="btn btn-outline-secondary"
-                                            type="button"
-                                            id="editEmpInfoModalBtn">
-                                            <i class="bi bi-printer"></i>
-                                        </button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                } catch (error) {
-                    console.log(error);
-                }
+                fetchAttendanceTable(1);
             }
         });
+
+        fetchAttendanceTable(1);
     });
 }
 
-async function exportAttendance() 
-{
-    const dateFrom = $("#dateFrom").val();
-    const dateTo = $("#dateTo").val(); 
+async function fetchAttendanceTable(page) {
 
-    try {
-        const response = await fetch(`${EXPORT_ATTENDANCE}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
-            method: "GET",
-            credentials: "include"
+    const dateFrom = $("#dateFrom").val();
+    const dateTo = $("#dateTo").val();
+
+    let response;
+
+    if (dateFrom && dateTo) {
+        if (dateFrom > dateTo) {
+            $("#dateTo").val("");
+            return showMessage("warning", "Warning Actions", "Date range invalid, earlier than date from");
+        }
+
+        response = await fetch(`${ATTENDANCES}?page=${page}&dateFrom=${encodeURIComponent(dateFrom)}&dateTo=${encodeURIComponent(dateTo)}`, {
+            method: "GET"
         });
 
-        const blob = await response.blob();
-        
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "Attendance Report.pdf";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        window.URL.revokeObjectURL(url);
-    } catch (error) {   
-        console.log(error);
+    } else {
+        response = await fetch(ATTENDANCES, {
+            method: "GET"
+        });
     }
-}
 
-async function fetchAttendanceTable() {
-    const response = await fetch(ATTENDANCES, {
-        method: "GET"
-    });
-
-    const result = await response.json();
-    console.log(result);
-    const tbody = document.querySelector('.management-table tbody');
-    tbody.innerHTML = '';
-    result.forEach(row => {
-
-        tbody.innerHTML += `
+    try {
+        const result = await response.json();
+        console.log(result);
+        const tbody = document.querySelector('.management-table tbody');
+        tbody.innerHTML = '';
+        result.data.forEach(row => {
+            tbody.innerHTML += `
                 <tr class="row-hover">
                     <td class="table-body-cell">
                         <div class="flex items-center gap-4">
@@ -124,7 +70,64 @@ async function fetchAttendanceTable() {
                     </td>
                 </tr>
             `;
-    });
+        });
+
+        renderPagination(result.totalPages, result.currentPage);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function renderPagination(totalPages, currentPage) {
+    const paginationContainer = document.getElementById("pagination");
+    paginationContainer.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.classList.add(
+            'w-8', 'h-8', 'flex', 'items-center', 'justify-center',
+            'rounded', 'bg-white', 'border', 'border-gray-100',
+            'text-gray-400', 'hover:text-[#B38888]'
+        );
+
+        if (i === currentPage) {
+            btn.classList.add('bg-[#B38888]', 'text-white');
+            btn.disabled = true;
+        }
+
+        btn.addEventListener("click", function () {
+            loadFilterScript(i);
+        });
+
+        paginationContainer.appendChild(btn);
+    }
+}
+
+async function exportAttendance() {
+    const dateFrom = $("#dateFrom").val();
+    const dateTo = $("#dateTo").val();
+
+    try {
+        const response = await fetch(`${EXPORT_ATTENDANCE}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        const blob = await response.blob();
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Attendance Report.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function getStatus(status) {
