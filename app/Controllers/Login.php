@@ -9,7 +9,7 @@ class Login extends BaseController
 
     public function index()
     {
-        return view("Login");
+        return view("index");
     }
 
     // --- RBAC AUTHENTICATION ---
