@@ -13,7 +13,7 @@ class AttendanceController extends BaseController
 
     public function saveAttendance()
     {
-        date_default_timezone_set("Asia/Manila");
+        date_default_timezone_set(config("App")->appTimezone);
 
         $cloudinaryHelper = new CloudinaryHelper();
         $attendanceModel = new AttendanceModel();

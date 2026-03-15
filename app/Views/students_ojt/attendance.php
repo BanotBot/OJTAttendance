@@ -262,7 +262,7 @@
                     </select>
 
                     <!-- Filter Button -->
-                    <button type="button" class="btn btn-primary btn-sm" id="btnAttendanceFilter">
+                    <button type="button" class="btn btn-sm" id="btnAttendanceFilter">
                         Apply Filter
                     </button>
 
@@ -270,7 +270,7 @@
 
                 <!-- Export Button -->
                 <div>
-                    <button class="btn btn-outline-primary btn-sm" type="button" onclick="exportAttendance()">
+                    <button class="btn btn-sm" type="button" onclick="exportAttendance()" id="exportBtn">
                         <i class="bi bi-printer"></i> Export
                     </button>
                 </div>
@@ -340,3 +340,14 @@
         </article>
     </div>
 </section>
+
+<style>
+
+    #btnAttendanceFilter , #exportBtn{
+        background-color: #B38888;
+        color: #FFFBEB;
+        border-radius: 5px;
+        padding: 10px 10px;
+    }
+
+</style>
